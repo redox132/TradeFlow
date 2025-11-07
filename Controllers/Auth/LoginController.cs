@@ -22,7 +22,7 @@ namespace LatestEcommAPI.Controllers.Auth
                     command.CommandText = "SELECT COUNT(*) FROM user WHERE email = $email AND password = $password";
                     command.Parameters.AddWithValue("$email", user.Email);
                     command.Parameters.AddWithValue("$password", user.Password);
-                    var count = (long)command.ExecuteScalar();
+                    var count = (long?)command.ExecuteScalar();
 
                     if (count == 0)
                     {
