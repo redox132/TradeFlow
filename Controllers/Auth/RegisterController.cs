@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
-using Test.Models;
+using LatestEcommAPI.Models;
 
-namespace Test.Auth.Controllers;
+namespace LatestEcommAPI.Auth.Controllers;
 
 
 [ApiController]
@@ -28,7 +28,13 @@ public class RegisterController : ControllerBase
                 command.ExecuteNonQuery();
             }
 
-            return Ok(new { message = user.Name });
+            var CreatedUser = new User
+            {
+                Email = user.Email,
+                Name = user.Name
+            };
+
+            return Ok(new { user = CreatedUser });
         }
         catch (SqliteException ex)
         {

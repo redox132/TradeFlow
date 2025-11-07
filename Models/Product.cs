@@ -1,4 +1,4 @@
-namespace Test.Models;
+namespace LatestEcommAPI.Models;
 
 public class Product
 {

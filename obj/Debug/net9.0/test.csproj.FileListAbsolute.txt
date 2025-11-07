@@ -112,3 +112,4 @@
 /Users/rida/rida/wmu/OOP/LatestEcommAPI/obj/Debug/net9.0/test.pdb
 /Users/rida/rida/wmu/OOP/LatestEcommAPI/obj/Debug/net9.0/test.genruntimeconfig.cache
 /Users/rida/rida/wmu/OOP/LatestEcommAPI/obj/Debug/net9.0/ref/test.dll
+/Users/rida/rida/wmu/OOP/LatestEcommAPI/obj/Debug/net9.0/test.sourcelink.json

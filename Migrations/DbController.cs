@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Data.Sqlite;
 
-namespace Test.Database
+namespace LatestEcommAPI.Database
 {
     public class DbController
     {

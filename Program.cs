@@ -1,4 +1,4 @@
-using Test.Database;
+using LatestEcommAPI.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 

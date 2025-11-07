@@ -1,18 +1,26 @@
 
 GET http://localhost:5089/api/user
 
-### 
-POST http://localhost:5089/api/user
+###
+POST http://localhost:5089/api/login
+Content-Type: application/json
+
+{
+    "email": "newemail@gmail.com",
+    "password": "SecurePassword123"
+}
 
 ###
-GET  http://localhost:5089/api/product
+GET http://localhost:5089/api/product
 
 ### Register a user into db.db/user table
 POST http://localhost:5089/api/register
 Content-Type: application/json
 
 {
-    "name": "Jasssne Doe",
-    "email": "<ddsdssd>",
-    "password": "<Pasdsdsdssword>"
+    "name": "name",
+    "email": "newemail@gmail.com",
+    "password": "SecurePassword123"
 }
+
+
