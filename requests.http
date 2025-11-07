@@ -19,8 +19,8 @@ Content-Type: application/json
 
 {
     "name": "name",
-    "email": "newemail@gmail.com",
-    "password": "SecurePassword123"
+    "email": "newsemail@gmail.com",
+    "password": "SecusrePassword123"
 }
 
 

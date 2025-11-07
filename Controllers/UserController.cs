@@ -20,10 +20,10 @@ public class UserController : ControllerBase
             command.ExecuteNonQuery();
 
             var reader = command.ExecuteReader();
-            var users = new List<User>();
+            var users = new List<object>();
             while (reader.Read())
             {
-                users.Add(new User
+                users.Add(new
                 {
                     Id = reader.GetInt32(0),
                     Email = reader.GetString(1),
@@ -31,7 +31,7 @@ public class UserController : ControllerBase
                 });
             }
 
-            return Ok(new { message = "200", users = users });
+            return Ok(new { message = "200", users });
         }
 
     }

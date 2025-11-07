@@ -28,13 +28,9 @@ public class RegisterController : ControllerBase
                 command.ExecuteNonQuery();
             }
 
-            var CreatedUser = new User
-            {
-                Email = user.Email,
-                Name = user.Name
-            };
+          
 
-            return Ok(new { user = CreatedUser });
+            return Ok(new { message = "User has been created!" });
         }
         catch (SqliteException ex)
         {
