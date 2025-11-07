@@ -1,0 +1,18 @@
+
+GET http://localhost:5089/api/user
+
+### 
+POST http://localhost:5089/api/user
+
+###
+GET  http://localhost:5089/api/product
+
+### Register a user into db.db/user table
+POST http://localhost:5089/api/register
+Content-Type: application/json
+
+{
+    "name": "Jasssne Doe",
+    "email": "<ddsdssd>",
+    "password": "<Pasdsdsdssword>"
+}
