@@ -1,0 +1,10 @@
+### Register a user 
+POST http://localhost:5089/api/register
+Content-Type: application/json
+
+{
+    "name": "name",
+    "email": "newsemail@gmail.com",
+    "password": "SecusrePassword123"
+}
+

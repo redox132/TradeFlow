@@ -47,4 +47,5 @@ public class UserController : ControllerBase
     {
         return Ok(new { message = "User created!", user = new { id = 1, name = "John Doe" } });
     }
+
 }

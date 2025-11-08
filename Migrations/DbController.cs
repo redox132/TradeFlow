@@ -61,6 +61,19 @@ namespace LatestEcommAPI.Database
                 );
             """);
 
+            ExecuteCommand(connection, """
+                CREATE TABLE IF NOT EXISTS address (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER NOT NULL,
+                    street TEXT NOT NULL,
+                    city TEXT NOT NULL,
+                    state TEXT NOT NULL,
+                    zip_code TEXT NOT NULL,
+                    country TEXT NOT NULL,
+                    FOREIGN KEY(user_id) REFERENCES user(id)
+                );
+            """);
+
             Console.WriteLine("Database migration completed.");
         }
 
