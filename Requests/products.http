@@ -1,0 +1,17 @@
+### Get all products, not implemented yet
+GET http://localhost:5089/api/product
+
+### get a product by id
+GET http://localhost:5089/api/product/1
+
+### create a product
+POST http://localhost:5089/api/product
+Content-Type: application/json
+
+{
+    "name": "Sneakers",
+    "price": 35.33
+}
+
+### delete a product by id
+DELETE  http://localhost:5089/api/product/1

@@ -102,20 +102,6 @@ namespace MyWebApp.Controllers
 
                 command.Parameters.AddWithValue("$id", id);
             }
-            return Ok(new { message = "Ok" });
-
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText = "DELETE FROM product WHERE id = $id";
-                command.Parameters.AddWithValue("$id", id);
-
-                int rowsAffected = command.ExecuteNonQuery();
-
-                if (rowsAffected == 0)
-                {
-                    return NotFound(new { message = "Product not found" });
-                }
-            }
             return Ok(new { message = "Product deleted successfully" });
         }
     }
