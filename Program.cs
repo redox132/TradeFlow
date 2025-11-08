@@ -1,5 +1,5 @@
 using LatestEcommAPI.Migrations;
-using Microsoft.OpenApi.Models; // <-- required for OpenApiInfo
+using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
