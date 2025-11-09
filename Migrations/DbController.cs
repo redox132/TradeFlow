@@ -34,8 +34,11 @@ namespace LatestEcommAPI.Migrations
                 CREATE TABLE IF NOT EXISTS orders (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     user_id INTEGER NOT NULL,
-                    order_date TEXT NOT NULL,
-                    FOREIGN KEY(user_id) REFERENCES user(id)
+                    shipper_id INTEGER,
+                    status enum('pending', 'shipped', 'delivered', 'cancelled') NOT NULL DEFAULT 'pending',
+                    order_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY(user_id) REFERENCES user(id),
+                    FOREIGN KEY(shipper_id) REFERENCES shipper(id)
                 );
             """);
 
@@ -92,6 +95,15 @@ namespace LatestEcommAPI.Migrations
                     FOREIGN KEY(product_id) REFERENCES product(id)
                 );
             """);
+
+
+            ExecuteCommand(connection, """
+            Craete table if not exists Shipper (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                phone TEXT NOT NULL
+            );
+            """ );
 
             
             Console.WriteLine("Database migration completed.");
