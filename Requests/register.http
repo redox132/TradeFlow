@@ -3,8 +3,8 @@ POST http://localhost:5089/api/register
 Content-Type: application/json
 
 {
-    "name": "name",
-    "email": "newsemail@gmail.com",
-    "password": "SecusrePassword123"
+    "name": "Rida EL Kouri",
+    "email": "ridaelkouri@gmail.com",
+    "password": "1234"
 }
 

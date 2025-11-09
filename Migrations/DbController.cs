@@ -35,7 +35,7 @@ namespace LatestEcommAPI.Migrations
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     user_id INTEGER NOT NULL,
                     shipper_id INTEGER,
-                    status enum('pending', 'shipped', 'delivered', 'cancelled') NOT NULL DEFAULT 'pending',
+                    status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending', 'shipped', 'delivered', 'cancelled')),
                     order_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY(user_id) REFERENCES user(id),
                     FOREIGN KEY(shipper_id) REFERENCES shipper(id)
@@ -98,7 +98,7 @@ namespace LatestEcommAPI.Migrations
 
 
             ExecuteCommand(connection, """
-            Craete table if not exists Shipper (
+            CREATE TABLE IF NOT EXISTS Shipper (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
                 phone TEXT NOT NULL

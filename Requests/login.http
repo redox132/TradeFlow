@@ -3,6 +3,6 @@ POST http://localhost:5089/api/login
 Content-Type: application/json
 
 {
-    "email": "newemail@gmail.com",
-    "password": "SecurePassword123"
+    "email": "ridaelkouri@gmail.com",
+    "password": "1234"
 }

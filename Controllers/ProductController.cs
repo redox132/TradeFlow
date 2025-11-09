@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using LatestEcommAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
@@ -10,6 +11,7 @@ namespace MyWebApp.Controllers
     public class ProductController : ControllerBase
     {
         [HttpGet]
+        [Authorize]
         public IActionResult GetAllProducts()
         {
             using (var connection = new SqliteConnection("Data source=Data/db.db"))
