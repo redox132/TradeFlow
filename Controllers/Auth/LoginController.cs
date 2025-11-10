@@ -1,4 +1,4 @@
-using LatestEcommAPI.User.DTOs;
+using LatestEcommAPI.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 using System.Security.Cryptography;

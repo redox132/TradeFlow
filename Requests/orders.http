@@ -1,2 +1,5 @@
-### get order item for order with ID 1
+### get order items for user with ID 1
+GET http://localhost:5089/api/order/1/items
+
+### get orders
 GET http://localhost:5089/api/order/1/items

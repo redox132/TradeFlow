@@ -35,14 +35,15 @@ namespace LatestEcommAPI.Migrations
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     user_id INTEGER NOT NULL,
                     shipper_id INTEGER,
-                    status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending', 'shipped', 'delivered', 'cancelled')),
+                    shipment_details TEXT,  -- JSON stored here
+                    status TEXT NOT NULL DEFAULT 'pending' 
+                        CHECK(status IN ('pending', 'shipped', 'delivered', 'cancelled')),
                     order_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY(user_id) REFERENCES user(id),
                     FOREIGN KEY(shipper_id) REFERENCES shipper(id)
                 );
             """);
 
-            // Create order_item table
             ExecuteCommand(connection, """
                 CREATE TABLE IF NOT EXISTS order_item (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -103,9 +104,9 @@ namespace LatestEcommAPI.Migrations
                 name TEXT NOT NULL,
                 phone TEXT NOT NULL
             );
-            """ );
+            """);
 
-            
+
             Console.WriteLine("Database migration completed.");
         }
 
@@ -133,4 +134,10 @@ namespace LatestEcommAPI.Migrations
         }
     }
 }
+
+
+
+
+
+
 

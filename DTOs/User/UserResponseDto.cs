@@ -1,5 +1,5 @@
 // DTOs/UserResponseDto.cs
-namespace LatestEcommAPI.User.DTOs
+namespace LatestEcommAPI.DTOs.User
 {
     public class UserResponseDto
     {
