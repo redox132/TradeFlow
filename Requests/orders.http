@@ -1,5 +1,15 @@
 ### get order items for user with ID 1
 GET http://localhost:5089/api/order/1/items
 
-### get orders
-GET http://localhost:5089/api/order/1/items
+### fullfil an order
+POST http://localhost:5089/api/order/1/fulfil
+Content-Type: application/json
+
+{
+  "Carrier": "DHL",
+  "TrackingNumber": "PlTestTrack",
+  "AddressLine1": "fab",
+  "City": "Waw",
+  "Postcode": "18320",
+  "Country": "France"
+}
