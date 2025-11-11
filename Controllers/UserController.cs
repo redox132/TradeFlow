@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 using LatestEcommAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LatestEcommAPI.Controllers;
 
@@ -9,6 +10,7 @@ namespace LatestEcommAPI.Controllers;
 public class UserController : ControllerBase
 {
     [HttpGet]
+    [Authorize]
     public IActionResult GetAllUsers()
     {
         using (var connection = new SqliteConnection("Data source=Data/db.db"))
@@ -37,13 +39,15 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize]
     public IActionResult GetUser(int id)
     {
         return Ok(new { message = $"Fetched user {id}" });
     }
 
     [HttpPost]
-    public IActionResult CreateUser() // use fake response
+    [Authorize]
+    public IActionResult CreateUser() 
     {
         return Ok(new { message = "User created!", user = new { id = 1, name = "John Doe" } });
     }

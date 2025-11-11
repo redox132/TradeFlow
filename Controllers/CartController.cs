@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using LatestEcommAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
@@ -7,7 +8,9 @@ using Microsoft.Data.Sqlite;
 [Route("api/[controller]")]
 public class CartController : ControllerBase
 {
+
     [HttpGet("{id}/items")]
+    [Authorize]
     public IActionResult GetCartItems([FromRoute] int id)
     {
         using (var connection = new SqliteConnection("Data source=Data/db.db"))

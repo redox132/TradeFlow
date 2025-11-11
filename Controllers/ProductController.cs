@@ -40,6 +40,7 @@ namespace MyWebApp.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public IActionResult GetProduct(int id)
         {
             using (var connection = new SqliteConnection("Data source=Data/db.db"))
@@ -73,6 +74,7 @@ namespace MyWebApp.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public IActionResult CreateProduct([FromBody] Product product)
         {
             using (var connection = new SqliteConnection("Data source=Data/db.db"))
@@ -92,6 +94,7 @@ namespace MyWebApp.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult DeleteProduct(int id)
         {
             using (var connection = new SqliteConnection("Data source=Data/db.db"))
@@ -109,6 +112,7 @@ namespace MyWebApp.Controllers
 
 
         [HttpPatch("{id}")]
+        [Authorize]
         public IActionResult UpdateStock([FromRoute] int id, Product product)
         {
             using (var connection = new SqliteConnection("Data source=Data/db.db"))

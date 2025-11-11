@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using LatestEcommAPI.Models;
 using LatestEcommAPI.DTOs.Order;
 using LatestEcommAPI.DTOs.ShipmentDetails;
@@ -12,6 +13,7 @@ namespace LatestEcommAPI.Controllers
     public class OrderController : ControllerBase
     {
         [HttpGet("{id}/items")]
+        [Authorize]
         public IActionResult GetOrderItems([FromRoute] int id)
         {
             var orders = new List<OrderDto>();

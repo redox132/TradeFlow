@@ -4,6 +4,7 @@ using LatestEcommAPI.DTOs.ShipmentDetails;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 namespace LatestEcommAPI.Controllers;
 
 [ApiController]
@@ -12,6 +13,7 @@ public class FulfilmentController : ControllerBase
 {
 
     [HttpPost("order/{id}/fulfil")]
+    [Authorize]
     public IActionResult FulFil([FromBody] ShipmentDetailsDto shipmentDetailsDto, int id)
     {
         using (var connection = new SqliteConnection("Data source=Data/db.db"))

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using LatestEcommAPI.Models;
 
@@ -8,6 +9,7 @@ namespace LatestEcommAPI.Controllers;
 public class AddressController : ControllerBase
 {
     [HttpGet("{id}")]
+    [Authorize]
     public IActionResult GetAddress(int id)
     {
         // Pretend we fetched an address from DB
@@ -26,6 +28,7 @@ public class AddressController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> CreateAddress([FromBody] Address address)
     {
         using (var reader = new StreamReader(Request.Body))
@@ -37,6 +40,7 @@ public class AddressController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize]
     public async Task<IActionResult> UpdateAddress(int id, [FromBody] Address adress)
     {
         using (var reader = new StreamReader(Request.Body))
