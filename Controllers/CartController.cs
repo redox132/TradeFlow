@@ -11,11 +11,11 @@ public class CartController : ControllerBase
 
     [HttpGet("{id}/items")]
     [Authorize]
-    public IActionResult GetCartItems([FromRoute] int id)
+    public async Task<IActionResult> GetCartItems([FromRoute] int id)
     {
         using (var connection = new SqliteConnection("Data source=Data/db.db"))
         {
-            connection.Open();
+            await connection.OpenAsync();
             var command = connection.CreateCommand();
             command.CommandText = @"
                 Select c.id, c.user_id, ci.product_id, ci.quantity
@@ -24,22 +24,28 @@ public class CartController : ControllerBase
                 Where c.user_id = $id;
                 ";
             command.Parameters.AddWithValue("$id", id);
-            var reader = command.ExecuteReader();
-            if (!reader.HasRows)
-            {
-                return Ok(new { message = $"No cart items found for user with ID {id}" });
-            }
+
             var cartItems = new List<object>();
-            while (reader.Read())
+
+            using (var reader = await command.ExecuteReaderAsync())
             {
-                cartItems.Add(new
+                if (!reader.HasRows)
                 {
-                    cartId = reader.GetInt32(0),
-                    productId = reader.GetInt32(2),
-                    quantity = reader.GetInt32(3)
-                });
+                    return Ok(new { message = $"No cart items found for user with ID: {id}" });
+                }
+
+                while (await reader.ReadAsync())
+                {
+                    cartItems.Add(new
+                    {
+                        cartId = reader.GetInt32(0),
+                        productId = reader.GetInt32(2),
+                        userId = reader.GetInt32(1),
+                        quantity = reader.GetInt32(3)
+                    });
+                }
             }
-            return Ok(cartItems);
+            return Ok(new { cartItems });
         }
     }
 }

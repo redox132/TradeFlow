@@ -2,12 +2,13 @@
 GET http://localhost:5089/api/order/1/items
 
 ### fullfil an order
-POST http://localhost:5089/api/order/1/fulfil
+POST http://localhost:5089/api/order/2/fulfil
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJpZGFlbGtvdXJpQGdtYWlsLmNvbSIsIm5iZiI6MTc2MzE0MjM4MCwiZXhwIjoxNzYzMTQ1OTgwLCJpYXQiOjE3NjMxNDIzODB9.3Jacgz1lGKPmABJp2gMh4ztAK5WiuxtCwcqDX59dVeI
 Content-Type: application/json
 
 {
-  "Carrier": "DHL",
-  "TrackingNumber": "PlTestTrack",
+  "CarrierId": 1,
+  "TrackingNumber": "sssssss",
   "AddressLine1": "fab",
   "City": "Waw",
   "Postcode": "18320",

@@ -12,64 +12,63 @@ namespace MyWebApp.Controllers
     {
         [HttpGet]
         [Authorize]
-        public IActionResult GetAllProducts()
+        public async Task<IActionResult> GetAllProducts()
         {
-            using (var connection = new SqliteConnection("Data source=Data/db.db"))
+            var products = new List<object>();
+
+            using (var connection = new SqliteConnection("Data Source=Data/db.db"))
             {
-                connection.Open();
+                await connection.OpenAsync();
 
                 var command = connection.CreateCommand();
-                command.CommandText = "SELECT * FROM product";
+                command.CommandText = "SELECT Id, Name, Price FROM product";
 
-                command.ExecuteNonQuery();
-
-                var reader = command.ExecuteReader();
-                var products = new List<object>();
-                while (reader.Read())
+                using (var reader = await command.ExecuteReaderAsync())
                 {
-                    products.Add(new
+                    while (await reader.ReadAsync())
                     {
-                        Id = reader.GetInt32(0),
-                        Name = reader.GetString(1),
-                        Price = reader.GetDecimal(2)
-                    });
+                        products.Add(new
+                        {
+                            Id = reader.GetInt32(0),
+                            Name = reader.GetString(1),
+                            Price = reader.GetDecimal(2)
+                        });
+                    }
                 }
-
-                return Ok(new { message = "200", products });
             }
+
+            return Ok(new { message = "200", products });
         }
 
         [HttpGet("{id}")]
         [Authorize]
-        public IActionResult GetProduct(int id)
+        public async Task<IActionResult> GetProduct(int id)
         {
+            var products = new List<object>();
             using (var connection = new SqliteConnection("Data source=Data/db.db"))
             {
-                connection.Open();
+                await connection.OpenAsync();
 
                 var command = connection.CreateCommand();
                 command.CommandText = "SELECT * FROM product WHERE id = $id";
 
                 command.Parameters.AddWithValue("$id", id);
 
-                command.ExecuteNonQuery();
-
-                var reader = command.ExecuteReader();
-                var products = new List<object>();
-
-                if (!reader.Read())
+                using (var reader = await command.ExecuteReaderAsync())
                 {
-                    return NotFound(new { error = "Product not found" });
+                    while (await reader.ReadAsync())
+                    {
+                        products.Add(new
+                        {
+                            Id = reader.GetInt32(0),
+                            Name = reader.GetString(1),
+                            Price = reader.GetDecimal(2)
+                        });
+                    }
                 }
-
-                products.Add(new
-                {
-                    Id = reader.GetInt32(0),
-                    Name = reader.GetString(1),
-                    Price = reader.GetDecimal(2)
-                });
-                return Ok(new { message = "200", product = products });
+                
             }
+            return Ok(new { message = "200", product = products });
         }
 
 
@@ -95,17 +94,19 @@ namespace MyWebApp.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
-        public IActionResult DeleteProduct(int id)
+        public async Task<IActionResult> DeleteProduct(int id)
         {
             using (var connection = new SqliteConnection("Data source=Data/db.db"))
             {
-                connection.Open();
+                await connection.OpenAsync();
 
                 var command = connection.CreateCommand();
 
                 command.CommandText = "DELETE FROM product WHERE id = $id";
 
                 command.Parameters.AddWithValue("$id", id);
+
+                command.ExecuteNonQuery();
             }
             return Ok(new { message = "Product deleted successfully" });
         }

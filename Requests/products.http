@@ -1,12 +1,14 @@
 ### Get all products, not implemented yet
 GET http://localhost:5089/api/product
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJpZGFlbGtvdXJpQGdtYWlsLmNvbSIsIm5iZiI6MTc2MjY4NTE1OCwiZXhwIjoxNzYyNjg4NzU4LCJpYXQiOjE3NjI2ODUxNTh9.lA3OBs8rb7Nnve8VT7xE9EFniMc39Wx4wMUa8mz1RF4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJpZGFlbGtvdXJpQGdtYWlsLmNvbSIsIm5iZiI6MTc2Mjk1NTEzOSwiZXhwIjoxNzYyOTU4NzM5LCJpYXQiOjE3NjI5NTUxMzl9.nLYqRi3rUi8YBK9o6SmsqQwxLH9NGY4nd2Q5eympogA
 
 ### get a product by id
 GET http://localhost:5089/api/product/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJpZGFlbGtvdXJpQGdtYWlsLmNvbSIsIm5iZiI6MTc2Mjk1NTEzOSwiZXhwIjoxNzYyOTU4NzM5LCJpYXQiOjE3NjI5NTUxMzl9.nLYqRi3rUi8YBK9o6SmsqQwxLH9NGY4nd2Q5eympogA
 
 ### create a product
 POST http://localhost:5089/api/product
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJpZGFlbGtvdXJpQGdtYWlsLmNvbSIsIm5iZiI6MTc2Mjk1NTEzOSwiZXhwIjoxNzYyOTU4NzM5LCJpYXQiOjE3NjI5NTUxMzl9.nLYqRi3rUi8YBK9o6SmsqQwxLH9NGY4nd2Q5eympogA
 Content-Type: application/json
 
 {
@@ -16,6 +18,7 @@ Content-Type: application/json
 
 ### delete a product by id
 DELETE  http://localhost:5089/api/product/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJpZGFlbGtvdXJpQGdtYWlsLmNvbSIsIm5iZiI6MTc2Mjk1NTEzOSwiZXhwIjoxNzYyOTU4NzM5LCJpYXQiOjE3NjI5NTUxMzl9.nLYqRi3rUi8YBK9o6SmsqQwxLH9NGY4nd2Q5eympogA
 
 ###
 PATCH  http://localhost:5089/api/product/1

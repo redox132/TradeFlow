@@ -14,13 +14,13 @@ public class FulfilmentController : ControllerBase
 
     [HttpPost("order/{id}/fulfil")]
     [Authorize]
-    public IActionResult FulFil([FromBody] ShipmentDetailsDto shipmentDetailsDto, int id)
+    public async Task<IActionResult> FulFil([FromBody] ShipmentDetailsDto shipmentDetailsDto, int id)
     {
         using (var connection = new SqliteConnection("Data source=Data/db.db"))
         {
             var shipmentDetails = new ShipmentDetailsDto
             {
-                Carrier = shipmentDetailsDto.Carrier,
+                CarrierId = shipmentDetailsDto.CarrierId,
                 TrackingNumber = shipmentDetailsDto.TrackingNumber,
                 AddressLine1 = shipmentDetailsDto.AddressLine1,
                 City = shipmentDetailsDto.City,
@@ -33,14 +33,23 @@ public class FulfilmentController : ControllerBase
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
             );
 
-            connection.Open();
-
+            await connection.OpenAsync();
+            
             var command = connection.CreateCommand();
             command.CommandText = $"UPDATE orders SET shipment_details = '{serialized}', status = 'shipped' WHERE id = $id ";
-
             command.Parameters.AddWithValue("$id", id);
 
-            command.ExecuteNonQuery();
+            int affectedRows = await command.ExecuteNonQueryAsync();
+
+            if (affectedRows == 0)
+            {
+                return NotFound(new { message = "Order not found" });
+            }
+
+            if (shipmentDetailsDto.CarrierId != 1)
+            {
+                return NotFound(new { message = $"The id provided is invalid carrier id: {shipmentDetails.CarrierId}" });
+            }
 
             return Ok(new { message = "OK", orderId = id, res = shipmentDetails });
         }
