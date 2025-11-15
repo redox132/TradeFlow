@@ -41,17 +41,18 @@ public class UserController : ControllerBase
                     });
                 }
             }
-
-            
             if (user.Count == 0)
             {
-                return NotFound(new { errors = new {
-                    statusIsUnfortunately = 404,
-                    description = "How? How can you reach this point and the user does not exist?"
-                }
-            });
+                return NotFound(new
+                {
+                    errors = new
+                    {
+                        statusIsUnfortunately = 404,
+                        description = "How? How can you reach this point and the user does not exist?"
+                    }
+                });
+            }
+            return Ok(new { message = "Ok", user });
         }
-        return Ok(new { message = "Ok", user });
     }
-}
 }
