@@ -16,6 +16,7 @@ namespace LatestEcommAPI.Migrations
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     email TEXT NOT NULL UNIQUE,
                     password VARCHAR NOT NULL,
+                    ApiKey TEXT,
                     name TEXT NOT NULL
                 );
             """);

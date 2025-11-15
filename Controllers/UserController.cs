@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 using LatestEcommAPI.Models;
 using Microsoft.AspNetCore.Authorization;
+using LatestEcommAPI.DTOs.User;
+using Microsoft.AspNetCore.Http.Headers;
+
 
 namespace LatestEcommAPI.Controllers;
 
@@ -9,47 +12,46 @@ namespace LatestEcommAPI.Controllers;
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
-    [HttpGet]
-    [Authorize]
-    public IActionResult GetAllUsers()
+    [HttpGet("whoami")]
+    public async Task<IActionResult> WhoAmI([FromHeader] string ApiKey)
     {
         using (var connection = new SqliteConnection("Data source=Data/db.db"))
         {
-            connection.Open();
+            await connection.OpenAsync();
             var command = connection.CreateCommand();
-            command.CommandText = "SELECT * FROM user";
+            command.CommandText = "SELECT * FROM user where ApiKey = $ApiKey";
+            command.Parameters.AddWithValue("$ApiKey", ApiKey);
 
-            command.ExecuteNonQuery();
-
-            var reader = command.ExecuteReader();
-            var users = new List<object>();
-            while (reader.Read())
+            if (!Request.Headers.ContainsKey("ApiKey"))
             {
-                users.Add(new
-                {
-                    Id = reader.GetInt32(0),
-                    Email = reader.GetString(1),
-                    Name = reader.GetString(2)
-                });
+                return BadRequest("Where is ApiKey?");
             }
 
-            return Ok(new { message = "200", users });
+            var user = new List<object>();
+
+            using (var reader = await command.ExecuteReaderAsync())
+            {
+                while (await reader.ReadAsync())
+                {
+                    user.Add(new UserResponseDto
+                    {
+                        Id = reader.GetInt32(0),
+                        Name = reader.GetString(1),
+                        Email = reader.GetString(2),
+                    });
+                }
+            }
+
+            
+            if (user.Count == 0)
+            {
+                return NotFound(new { errors = new {
+                    statusIsUnfortunately = 404,
+                    description = "How? How can you reach this point and the user does not exist?"
+                }
+            });
         }
-
+        return Ok(new { message = "Ok", user });
     }
-
-    [HttpGet("{id}")]
-    [Authorize]
-    public IActionResult GetUser(int id)
-    {
-        return Ok(new { message = $"Fetched user {id}" });
-    }
-
-    [HttpPost]
-    [Authorize]
-    public IActionResult CreateUser() 
-    {
-        return Ok(new { message = "User created!", user = new { id = 1, name = "John Doe" } });
-    }
-
+}
 }

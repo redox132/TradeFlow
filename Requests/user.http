@@ -1,0 +1,3 @@
+### check the current identity
+GET http://localhost:5089/api/user/whoami
+ApiKey: 123
