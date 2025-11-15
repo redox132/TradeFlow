@@ -24,11 +24,12 @@ public class RegisterController : ControllerBase
 
                 var command = connection.CreateCommand();
                 command.CommandText = @"
-                    INSERT INTO user (email, password, name)
-                    VALUES ($email, $password, $name)";
+                    INSERT INTO users (email, password, name, X_API_KEY)
+                    VALUES ($email, $password, $name, $X_API_KEY)";
                 command.Parameters.AddWithValue("$email", userDto.Email);
                 command.Parameters.AddWithValue("$password", hashedPassword);
                 command.Parameters.AddWithValue("$name", userDto.Name);
+                command.Parameters.AddWithValue("$X_API_KEY", GenerateRandomString(128));
 
                 command.ExecuteNonQuery();
             }
@@ -57,4 +58,20 @@ public class RegisterController : ControllerBase
         // Store salt + hash together
         return $"{Convert.ToBase64String(salt)}.{hashed}";
     }
+
+
+    private static string GenerateRandomString(int length = 32)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var random = new Random();
+        var result = new char[length];
+
+        for (int i = 0; i < length; i++)
+        {
+            result[i] = chars[random.Next(chars.Length)];
+        }
+
+        return new string(result);
+    }
+
 }

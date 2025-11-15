@@ -16,5 +16,6 @@ Content-Type: application/json
 }
 
 ### get order items for user with ID 1
-GET http://localhost:5089/api/orders
+GET http://localhost:5089/api/orders?size=20&page=1
+X_API_KEY: sNGWOhCFmrucB1dwsEl39kyWxhLCgRGk9QdB0ancd2l4CAnQpgdZy1UzcPVuQT4Z2j3ljaja8znyIMRHiy9mWY6xyDtBOk74l9nk7hzESwVuj5iunYXBBk5JpVyi4cLc
 # Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJpZGFlbGtvdXJpQGdtYWlsLmNvbSIsIm5iZiI6MTc2MzE0MjM4MCwiZXhwIjoxNzYzMTQ1OTgwLCJpYXQiOjE3NjMxNDIzODB9.3Jacgz1lGKPmABJp2gMh4ztAK5WiuxtCwcqDX59dVeI

@@ -18,10 +18,10 @@ public class UserController : ControllerBase
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
-            command.CommandText = "SELECT * FROM user where ApiKey = $ApiKey";
-            command.Parameters.AddWithValue("$ApiKey", X_API_KEY);
+            command.CommandText = "SELECT name, email FROM users where X_API_KEY = $X_API_KEY";
+            command.Parameters.AddWithValue("$X_API_KEY", X_API_KEY);
 
-            if (!Request.Headers.ContainsKey("ApiKey"))
+            if (!Request.Headers.ContainsKey("X_API_KEY"))
             {
                 return BadRequest("Where is ApiKey?");
             }
@@ -34,9 +34,8 @@ public class UserController : ControllerBase
                 {
                     user.Add(new UserResponseDto
                     {
-                        Id = reader.GetInt32(0),
-                        Name = reader.GetString(1),
-                        Email = reader.GetString(2),
+                        Name = reader.GetString(0),
+                        Email = reader.GetString(1),
                     });
                 }
             }

@@ -53,7 +53,7 @@ namespace MyWebApp.Controllers
                 await connection.OpenAsync();
 
                 var command = connection.CreateCommand();
-                command.CommandText = "SELECT * FROM product WHERE id = $id";
+                command.CommandText = "SELECT * FROM products WHERE id = $id";
 
                 command.Parameters.AddWithValue("$id", id);
 
@@ -85,7 +85,7 @@ namespace MyWebApp.Controllers
 
                 var command = connection.CreateCommand();
 
-                command.CommandText = "INSERT INTO product (name, price) VALUES ($name, $price)";
+                command.CommandText = "INSERT INTO products (name, price) VALUES ($name, $price)";
 
                 command.Parameters.AddWithValue("$name", product.Name);
                 command.Parameters.AddWithValue("$price", product.Price);
@@ -105,7 +105,7 @@ namespace MyWebApp.Controllers
 
                 var command = connection.CreateCommand();
 
-                command.CommandText = "DELETE FROM product WHERE id = $id";
+                command.CommandText = "DELETE FROM products WHERE id = $id";
 
                 command.Parameters.AddWithValue("$id", id);
 
@@ -123,7 +123,7 @@ namespace MyWebApp.Controllers
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-                command.CommandText = "UPDATE product set price = $price where id = $id";
+                command.CommandText = "UPDATE products set price = $price where id = $id";
 
                 command.Parameters.AddWithValue("$price", product.Price);
                 command.Parameters.AddWithValue("$id", id);

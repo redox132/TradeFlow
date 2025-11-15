@@ -36,7 +36,7 @@ namespace LatestEcommAPI.Controllers.Auth
                     connection.Open();
 
                     var command = connection.CreateCommand();
-                    command.CommandText = "SELECT password FROM user WHERE email = $email";
+                    command.CommandText = "SELECT password FROM users WHERE email = $email";
                     command.Parameters.AddWithValue("$email", loginDto.Email);
 
                     using var reader = command.ExecuteReader();

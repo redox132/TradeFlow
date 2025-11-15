@@ -91,16 +91,19 @@ namespace LatestEcommAPI.Controllers
         }
 
         [HttpGet]
+
         // [Authorize]
-        public async Task<IActionResult> GetALlOrders(int id)
+        public async Task<IActionResult> GetALlOrders([FromHeader] string X_API_KEY, [FromQuery] int size = 15, int page = 1)
         {
             using (var connection = new SqliteConnection("Data source=Data/db.db"))
             {
                 await connection.OpenAsync();
 
                 var command = connection.CreateCommand();
-                var res = command.CommandText = "SELECT * from orders";
-
+                var res = command.CommandText = "SELECT o.* FROM orders o INNER JOIN users u ON o.user_id = u.id WHERE u.X_API_KEY = $X_API_KEY LIMIT $size OFFSET $page";
+                command.Parameters.AddWithValue("$size", size);
+                command.Parameters.AddWithValue("$X_API_KEY", X_API_KEY);
+                command.Parameters.AddWithValue("$page", size * (page - 1));
                 var orders = new List<object>();
 
                 using (var reader = await command.ExecuteReaderAsync())
@@ -116,7 +119,7 @@ namespace LatestEcommAPI.Controllers
                         orders.Add(order);
                     }
                 }
-                return Ok(new { message = "This has been OK", orders});
+                return Ok(new { message = "This has been OK", orders });
             }
         }
     }

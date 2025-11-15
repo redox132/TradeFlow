@@ -15,9 +15,9 @@ namespace LatestEcommAPI.Migrations
                 CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     email TEXT NOT NULL UNIQUE,
+                    name TEXT NOT NULL,
                     password VARCHAR NOT NULL,
-                    X_API_KEY TEXT,
-                    name TEXT NOT NULL
+                    X_API_KEY TEXT
                 );
             """);
 
