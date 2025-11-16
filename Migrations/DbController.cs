@@ -10,106 +10,140 @@ namespace LatestEcommAPI.Migrations
             using var connection = new SqliteConnection("Data Source=Data/db.db");
             connection.Open();
 
-            // Create user table
+            // USERS
             ExecuteCommand(connection, """
                 CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     email TEXT NOT NULL UNIQUE,
                     name TEXT NOT NULL,
-                    password VARCHAR NOT NULL,
-                    X_API_KEY TEXT
+                    password TEXT NOT NULL,
+                    x_api_key TEXT UNIQUE
                 );
             """);
 
-            // Create product table
+            // PRODUCTS
             ExecuteCommand(connection, """
                 CREATE TABLE IF NOT EXISTS products (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name TEXT NOT NULL,
-                    price REAL NOT NULL,
                     user_id INTEGER NOT NULL,
-                    FOREIGN KEY(user_id) REFERENCES user(id) ON DELETE CASCADE
+                    name TEXT NOT NULL,
+                    catalog_number TEXT,
+                    ean TEXT,
+                    symbol TEXT,
+                    location TEXT,
+                    stock INTEGER NOT NULL DEFAULT 0,
+                    price REAL NOT NULL,
+                    is_active INTEGER NOT NULL DEFAULT 1,
+                    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
                 );
             """);
 
-            // Create orders table
+            // VARIANTS
+            ExecuteCommand(connection, """
+                CREATE TABLE IF NOT EXISTS product_variants (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    product_id INTEGER NOT NULL,
+                    catalog_number TEXT,
+                    ean TEXT,
+                    symbol TEXT,
+                    FOREIGN KEY(product_id) REFERENCES products(id) ON DELETE CASCADE
+                );
+            """);
+
+            // ORDERS
             ExecuteCommand(connection, """
                 CREATE TABLE IF NOT EXISTS orders (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     user_id INTEGER NOT NULL,
-                    shipper_id INTEGER,
-                    shipment_details TEXT,  -- JSON stored here
-                    status TEXT NOT NULL DEFAULT 'pending' 
-                        CHECK(status IN ('pending', 'shipped', 'delivered', 'cancelled')),
-                    order_date timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY(user_id) REFERENCES user(id),
-                    FOREIGN KEY(shipper_id) REFERENCES shipper(id)
+                    currency TEXT NOT NULL DEFAULT 'pln',
+                    payment_status TEXT NOT NULL DEFAULT 'pending',
+                    paid REAL DEFAULT 0,
+                    status INTEGER NOT NULL DEFAULT 1,
+                    email TEXT,
+                    date TEXT DEFAULT CURRENT_TIMESTAMP,
+                    shipment_price REAL DEFAULT 0,
+                    comment TEXT,
+                    invoice INTEGER DEFAULT 0,
+                    document_number TEXT,
+                    bill_address_id INTEGER,
+                    ship_address_id INTEGER,
+                    pickup_point_json TEXT,
+                    FOREIGN KEY(user_id) REFERENCES users(id),
+                    FOREIGN KEY(bill_address_id) REFERENCES addresses(id),
+                    FOREIGN KEY(ship_address_id) REFERENCES addresses(id)
                 );
             """);
 
+            // ORDER ITEMS
             ExecuteCommand(connection, """
                 CREATE TABLE IF NOT EXISTS order_items (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     order_id INTEGER NOT NULL,
-                    product_id INTEGER NOT NULL,
+                    product_id INTEGER,
+                    variant_id INTEGER,
                     quantity INTEGER NOT NULL,
-                    FOREIGN KEY(order_id) REFERENCES orders(id),
-                    FOREIGN KEY(product_id) REFERENCES product(id)
+                    price REAL NOT NULL,
+                    tax REAL,
+                    catalog_number TEXT,
+                    ean TEXT,
+                    name TEXT,
+                    weight REAL,
+                    additional_information TEXT,
+                    FOREIGN KEY(order_id) REFERENCES orders(id) ON DELETE CASCADE,
+                    FOREIGN KEY(product_id) REFERENCES products(id),
+                    FOREIGN KEY(variant_id) REFERENCES product_variants(id)
                 );
             """);
 
-            // Create inventory table
-            ExecuteCommand(connection, """
-                CREATE TABLE IF NOT EXISTS inventory (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    product_id INTEGER NOT NULL,
-                    stock_quantity INTEGER NOT NULL,
-                    FOREIGN KEY(product_id) REFERENCES product(id)
-                );
-            """);
-
+            // ADDRESSES
             ExecuteCommand(connection, """
                 CREATE TABLE IF NOT EXISTS addresses (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     user_id INTEGER NOT NULL,
+                    name TEXT,
+                    surname TEXT,
                     street TEXT NOT NULL,
+                    home_number TEXT,
+                    flat_number TEXT,
+                    description TEXT,
+                    postcode TEXT,
                     city TEXT NOT NULL,
-                    state TEXT NOT NULL,
-                    zip_code TEXT NOT NULL,
-                    country TEXT NOT NULL,
-                    FOREIGN KEY(user_id) REFERENCES user(id)
+                    state TEXT,
+                    phone TEXT,
+                    company_name TEXT,
+                    company_nip TEXT,
+                    country_id INTEGER,
+                    FOREIGN KEY(user_id) REFERENCES users(id),
+                    FOREIGN KEY(country_id) REFERENCES supported_countries(id)
                 );
             """);
 
+            // SUPPORTED COUNTRIES
             ExecuteCommand(connection, """
                 CREATE TABLE IF NOT EXISTS supported_countries (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    country_code TEXT NOT NULL UNIQUE,  
-                    country_name TEXT NOT NULL,  
+                    code TEXT NOT NULL UNIQUE,
+                    name TEXT NOT NULL,
                     is_active INTEGER NOT NULL DEFAULT 1
                 );
             """);
 
+            // CARRIERS
             ExecuteCommand(connection, """
-                CREATE TABLE IF NOT EXISTS cart_items (
+                CREATE TABLE IF NOT EXISTS carriers (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    cart_id INTEGER NOT NULL,
-                    product_id INTEGER NOT NULL,
-                    quantity INTEGER NOT NULL,
-                    FOREIGN KEY(cart_id) REFERENCES cart(id),
-                    FOREIGN KEY(product_id) REFERENCES product(id)
+                    user_id INTEGER NOT NULL,
+                    name TEXT NOT NULL,
+                    code TEXT NOT NULL,
+                    tracking_url TEXT,
+                    supports_tracking INTEGER DEFAULT 1,
+                    supports_international INTEGER DEFAULT 0,
+                    is_active INTEGER DEFAULT 1,
+                    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
                 );
             """);
-
-
-            ExecuteCommand(connection, """
-            CREATE TABLE IF NOT EXISTS carriers (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                is_active INTEGER NOT NULL DEFAULT 1
-            );
-            """);
-
 
             Console.WriteLine("Database migration completed.");
         }
@@ -120,28 +154,5 @@ namespace LatestEcommAPI.Migrations
             cmd.CommandText = sql;
             cmd.ExecuteNonQuery();
         }
-        public static void Seed()
-        {
-            using var connection = new SqliteConnection("Data Source=Data/db.db");
-            connection.Open();
-
-            // Seed users
-            ExecuteCommand(connection, "INSERT INTO user (name) VALUES ('Alice'), ('Bob'), ('Charlie');");
-
-            // Seed products
-            ExecuteCommand(connection, "INSERT INTO product (name, price) VALUES ('Laptop', 999.99), ('Smartphone', 499.99), ('Tablet', 299.99);");
-
-            // Seed inventory
-            ExecuteCommand(connection, "INSERT INTO inventory (product_id, stock_quantity) VALUES (1, 50), (2, 100), (3, 75);");
-
-            Console.WriteLine("Database seeding completed.");
-        }
     }
 }
-
-
-
-
-
-
-

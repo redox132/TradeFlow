@@ -35,7 +35,7 @@ public class FulfilmentController : ControllerBase
 
             await connection.OpenAsync();
             
-            var command = connection.CreateCommand();
+         var command = connection.CreateCommand();
             command.CommandText = $"UPDATE orders SET shipment_details = '{serialized}', status = 'shipped' WHERE id = $id ";
             command.Parameters.AddWithValue("$id", id);
 
