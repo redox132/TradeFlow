@@ -4,7 +4,7 @@ using LatestEcommAPI.Models;
 using Tradeflow.DTOs.Product;
 using Tradeflow.Helpers;
 
-namespace MyWebApp.Controllers
+namespace Tradeflowi.Controllers
 {
     [ApiController]
     [Route("api/products")]
@@ -244,9 +244,9 @@ namespace MyWebApp.Controllers
                 // Get product
                 var productCmd = connection.CreateCommand();
                 productCmd.CommandText = @"
-            SELECT id, name, catalog_number, ean, symbol, location, stock, price, is_active
-            FROM products
-            WHERE id = $productId AND user_id = $userId";
+                    SELECT id, name, catalog_number, ean, symbol, location, stock, price, is_active
+                    FROM products
+                    WHERE id = $productId AND user_id = $userId";
                 productCmd.Parameters.AddWithValue("$productId", productId);
                 productCmd.Parameters.AddWithValue("$userId", userId);
 
@@ -271,9 +271,9 @@ namespace MyWebApp.Controllers
                 var variants = new List<object>();
                 var variantCmd = connection.CreateCommand();
                 variantCmd.CommandText = @"
-            SELECT id, catalog_number, ean, symbol
-            FROM product_variants
-            WHERE product_id = $productId";
+                    SELECT id, catalog_number, ean, symbol
+                    FROM product_variants
+                    WHERE product_id = $productId";
                 variantCmd.Parameters.AddWithValue("$productId", productId);
 
                 using var variantReader = await variantCmd.ExecuteReaderAsync();

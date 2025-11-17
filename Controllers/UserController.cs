@@ -12,16 +12,16 @@ namespace LatestEcommAPI.Controllers;
 public class UserController : ControllerBase
 {
     [HttpGet("whoami")]
-    public async Task<IActionResult> WhoAmI([FromHeader] string X_API_KEY)
+    public async Task<IActionResult> WhoAmI([FromHeader(Name = "X-API-KEY")] string X_API_KEY)
     {
         using (var connection = new SqliteConnection("Data source=Data/db.db"))
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
-            command.CommandText = "SELECT name, email FROM users where X_API_KEY = $X_API_KEY";
+            command.CommandText = "SELECT name, email FROM users where x_api_key = $X_API_KEY";
             command.Parameters.AddWithValue("$X_API_KEY", X_API_KEY);
 
-            if (!Request.Headers.ContainsKey("X_API_KEY"))
+            if (!Request.Headers.ContainsKey("X-API-KEY"))
             {
                 return BadRequest("Where is ApiKey?");
             }

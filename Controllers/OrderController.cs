@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Authorization;
-using LatestEcommAPI.Models;
-using LatestEcommAPI.DTOs.Order;
-using LatestEcommAPI.DTOs.ShipmentDetails;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
+using LatestEcommAPI.DTOs.Order;
+using LatestEcommAPI.DTOs.ShipmentDetails;
 using System.Text.Json;
 
 namespace LatestEcommAPI.Controllers
@@ -12,115 +10,119 @@ namespace LatestEcommAPI.Controllers
     [Route("api/orders")]
     public class OrderController : ControllerBase
     {
-        [HttpGet("{id}/items")]
-        [Authorize]
-        public IActionResult GetOrderItems([FromRoute] int id)
+        // ---------------------------------------------------------
+        // GET SPECIFIC ORDER + ITEMS
+        // ---------------------------------------------------------
+        [HttpGet("{orderId}/items")]
+        public IActionResult GetOrderItems([FromRoute] int orderId)
         {
-            var orders = new List<OrderDto>();
+            using var connection = new SqliteConnection("Data Source=Data/db.db");
+            connection.Open();
 
-            using (var connection = new SqliteConnection("Data source=Data/db.db"))
+            var items = new List<object>();
+
+            using var cmd = connection.CreateCommand();
+            cmd.CommandText = @"
+                SELECT 
+                    o.id AS OrderId,
+                    o.order_date AS OrderDate,
+                    o.currency,
+                    o.payment_status,
+                    o.status,
+                    oi.id AS ItemId,
+                    oi.product_id,
+                    oi.variant_id,
+                    oi.quantity,
+                    oi.price,
+                    oi.catalog_number,
+                    oi.ean,
+                    oi.name
+                FROM orders o
+                LEFT JOIN order_items oi ON o.id = oi.order_id
+                WHERE o.id = $orderId;
+            ";
+            cmd.Parameters.AddWithValue("$orderId", orderId);
+
+            using var reader = cmd.ExecuteReader();
+
+            while (reader.Read())
             {
-                connection.Open();
-
-                using (var command = connection.CreateCommand())
+                items.Add(new
                 {
+                    OrderId = reader.GetInt32(0),
+                    OrderDate = reader.IsDBNull(1) ? null : reader.GetString(1),
+                    Currency = reader.GetString(2),
+                    PaymentStatus = reader.GetString(3),
+                    Status = reader.GetInt32(4),
 
-                    command.CommandText = @"
-                        SELECT 
-                            o.id AS OrderId,
-                            o.order_date AS OrderDate,
-                            oi.product_id AS ProductID,
-                            oi.quantity AS Quantity,
-                            o.shipment_details AS ShipmentDetails
-                        FROM orders o
-                        JOIN order_item oi ON o.id = oi.order_id
-                        WHERE o.user_id = $id;
-                    ";
-                    command.Parameters.AddWithValue("$id", id);
+                    ItemId = reader.IsDBNull(5) ? (int?)null : reader.GetInt32(5),
+                    ProductId = reader.IsDBNull(6) ? (int?)null : reader.GetInt32(6),
+                    VariantId = reader.IsDBNull(7) ? (int?)null : reader.GetInt32(7),
+                    Quantity = reader.IsDBNull(8) ? (int?)null : reader.GetInt32(8),
+                    Price = reader.IsDBNull(9) ? (decimal?)null : reader.GetDecimal(9),
+                    CatalogNumber = reader.IsDBNull(10) ? null : reader.GetString(10),
+                    EAN = reader.IsDBNull(11) ? null : reader.GetString(11),
+                    Name = reader.IsDBNull(12) ? null : reader.GetString(12)
+                });
+            }
 
-                    using (var reader = command.ExecuteReader())
-                    {
-                        int idxOrderId = reader.GetOrdinal("OrderId");
-                        int idxOrderDate = reader.GetOrdinal("OrderDate");
-                        int idxProductID = reader.GetOrdinal("ProductID");
-                        int idxQuantity = reader.GetOrdinal("Quantity");
-                        int idxShipmentDetails = reader.GetOrdinal("ShipmentDetails");
+            return Ok(new { message = "OK", orderId, items });
+        }
 
-                        while (reader.Read())
-                        {
-                            ShipmentDetailsDto? shipment = null;
 
-                            if (!reader.IsDBNull(idxShipmentDetails))
-                            {
-                                var raw = reader.GetString(idxShipmentDetails);
+        // ---------------------------------------------------------
+        // GET ALL ORDERS FOR USER (via API key)
+        // ---------------------------------------------------------
+        [HttpGet]
+        public async Task<IActionResult> GetAllOrders(
+            [FromHeader] string X_API_KEY,
+            [FromQuery] int size = 15,
+            [FromQuery] int page = 1)
+        {
+            using var connection = new SqliteConnection("Data Source=Data/db.db");
+            await connection.OpenAsync();
 
-                                if (!string.IsNullOrWhiteSpace(raw))
-                                {
-                                    try
-                                    {
-                                        shipment = JsonSerializer.Deserialize<ShipmentDetailsDto>(
-                                            raw,
-                                            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-                                        );
-                                    }
-                                    catch (JsonException)
-                                    {
-                                        // Fallback for plain text: store it in AddressLine1
-                                        shipment = new ShipmentDetailsDto { AddressLine1 = raw };
-                                    }
-                                }
-                            }
+            // get user
+            var userCmd = connection.CreateCommand();
+            userCmd.CommandText = "SELECT id FROM users WHERE x_api_key = $api;";
+            userCmd.Parameters.AddWithValue("$api", X_API_KEY);
 
-                            var item = new OrderDto
-                            {
-                                OrderId = reader.GetInt32(idxOrderId),
-                                OrderDate = reader.GetDateTime(idxOrderDate),
-                                ProductID = reader.GetInt32(idxProductID),
-                                Quantity = reader.GetInt32(idxQuantity),
-                                ShipmentDetails = shipment
-                            };
+            var uid = await userCmd.ExecuteScalarAsync();
+            if (uid == null)
+                return Unauthorized(new { message = "Invalid API Key" });
 
-                            orders.Add(item);
-                        }
+            int userId = Convert.ToInt32(uid);
 
-                    }
-                }
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = @"
+                SELECT id, currency, payment_status, paid, status, email, date, order_date
+                FROM orders
+                WHERE user_id = $userId
+                LIMIT $size OFFSET $offset;
+            ";
+            cmd.Parameters.AddWithValue("$userId", userId);
+            cmd.Parameters.AddWithValue("$size", size);
+            cmd.Parameters.AddWithValue("$offset", (page - 1) * size);
+
+            var orders = new List<object>();
+
+            using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                orders.Add(new
+                {
+                    OrderId = reader.GetInt32(0),
+                    Currency = reader.GetString(1),
+                    PaymentStatus = reader.GetString(2),
+                    Paid = reader.IsDBNull(3) ? (decimal?)0 : reader.GetDecimal(3),
+                    Status = reader.GetInt32(4),
+                    Email = reader.IsDBNull(5) ? null : reader.GetString(5),
+                    Date = reader.IsDBNull(6) ? null : reader.GetString(6),
+                    OrderDate = reader.IsDBNull(7) ? null : reader.GetString(7)
+                });
             }
 
             return Ok(new { message = "OK", orders });
-        }
-
-        [HttpGet]
-
-        // [Authorize]
-        public async Task<IActionResult> GetALlOrders([FromHeader] string X_API_KEY, [FromQuery] int size = 15, int page = 1)
-        {
-            using (var connection = new SqliteConnection("Data source=Data/db.db"))
-            {
-                await connection.OpenAsync();
-
-                var command = connection.CreateCommand();
-                var res = command.CommandText = "SELECT o.* FROM orders o INNER JOIN users u ON o.user_id = u.id WHERE u.X_API_KEY = $X_API_KEY LIMIT $size OFFSET $page";
-                command.Parameters.AddWithValue("$size", size);
-                command.Parameters.AddWithValue("$X_API_KEY", X_API_KEY);
-                command.Parameters.AddWithValue("$page", size * (page - 1));
-                var orders = new List<object>();
-
-                using (var reader = await command.ExecuteReaderAsync())
-                {
-                    while (await reader.ReadAsync())
-                    {
-                        var order = new
-                        {
-                            OrderId = reader.GetInt32(0),
-                            ProductID = reader.GetInt32(1),
-                            ShipperId = reader.GetInt32(2)
-                        };
-                        orders.Add(order);
-                    }
-                }
-                return Ok(new { message = "This has been OK", orders });
-            }
         }
     }
 }

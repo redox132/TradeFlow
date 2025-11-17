@@ -1,5 +1,5 @@
 ### get order items for user with ID 1
-GET http://localhost:5089/api/order/1/items
+GET http://localhost:5089/api/orders/1/items
 
 ### fullfil an order
 POST http://localhost:5089/api/order/2/fulfil
@@ -17,5 +17,5 @@ Content-Type: application/json
 
 ### get order items for user with ID 1
 GET http://localhost:5089/api/orders?size=20&page=1
-X_API_KEY: sNGWOhCFmrucB1dwsEl39kyWxhLCgRGk9QdB0ancd2l4CAnQpgdZy1UzcPVuQT4Z2j3ljaja8znyIMRHiy9mWY6xyDtBOk74l9nk7hzESwVuj5iunYXBBk5JpVyi4cLc
+X_API_KEY: xskLEaNQdMwXMj2PEqLBhcpUSL3VlrfQBPkoG5WQGANhUGmUO8WVlMyxfF30V2YMm2kwe4Dw9p1TLgrjvVUSTI4UTjzMFlDrrsi2sYAcDAe5BXvmzXonHsIYaetj4JCy
 # Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJpZGFlbGtvdXJpQGdtYWlsLmNvbSIsIm5iZiI6MTc2MzE0MjM4MCwiZXhwIjoxNzYzMTQ1OTgwLCJpYXQiOjE3NjMxNDIzODB9.3Jacgz1lGKPmABJp2gMh4ztAK5WiuxtCwcqDX59dVeI

@@ -68,6 +68,7 @@ namespace LatestEcommAPI.Migrations
                     bill_address_id INTEGER,
                     ship_address_id INTEGER,
                     pickup_point_json TEXT,
+                    order_date datetime,
                     FOREIGN KEY(user_id) REFERENCES users(id),
                     FOREIGN KEY(bill_address_id) REFERENCES addresses(id),
                     FOREIGN KEY(ship_address_id) REFERENCES addresses(id)
