@@ -128,6 +128,17 @@ namespace LatestEcommAPI.Migrations
                 );
             """);
 
+            // catalogs
+            ExecuteCommand(connection, """
+                CREATE TABLE IF NOT EXISTS catalogs (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    code TEXT NOT NULL UNIQUE,
+                    name TEXT,
+                    description TEXT
+                );
+            """);
+
+
             // CARRIERS
             ExecuteCommand(connection, """
                 CREATE TABLE IF NOT EXISTS carriers (
