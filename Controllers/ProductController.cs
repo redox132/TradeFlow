@@ -3,6 +3,7 @@ using Microsoft.Data.Sqlite;
 using LatestEcommAPI.Models;
 using Tradeflow.DTOs.Product;
 using Tradeflow.Helpers;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace Tradeflowi.Controllers
 {
@@ -79,8 +80,14 @@ namespace Tradeflowi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromHeader(Name = "X-API-KEY")] string X_API_KEY, [FromBody] ProductCreateDto productDto)
         {
+            // ...
             using (var connection = new SqliteConnection("Data Source=Data/db.db"))
             {
+            if (!ModelState.IsValid)
+            {
+                // Model binding failed or validation rules were violated
+                return BadRequest(ModelState);
+            }
                 await connection.OpenAsync();
 
                 // Get user ID
@@ -109,6 +116,7 @@ namespace Tradeflowi.Controllers
                 insertProductCmd.Parameters.AddWithValue("$price", productDto.Price);
 
                 var productId = (long?)await insertProductCmd.ExecuteScalarAsync();
+
 
                 // Insert variants
                 if (productDto.Variants != null)

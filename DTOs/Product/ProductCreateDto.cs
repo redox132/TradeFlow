@@ -1,7 +1,9 @@
+using System.ComponentModel.DataAnnotations;
 using Tradeflow.DTOs.ProductVariant;
-
 public class ProductCreateDto
 {
+    [Required]
+    [StringLength(100, MinimumLength = 1)]
     public required string Name { get; set; }
     public string? CatalogNumber { get; set; }
     public string? EAN { get; set; }

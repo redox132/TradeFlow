@@ -1,8 +1,8 @@
+using Microsoft.OpenApi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using LatestEcommAPI.Migrations;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.OpenApiInfo
     {
         Title = "LatestEcommAPI",
         Version = "v1"
@@ -21,7 +21,6 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // Add JWT authentication
-
 var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
 builder.Services.AddAuthentication(options =>
 {
@@ -60,3 +59,6 @@ app.MapControllers();
 DbController.Migrate();
 
 app.Run();
+
+// Required for integration tests
+public partial class Program { }
