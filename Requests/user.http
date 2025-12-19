@@ -1,3 +1,0 @@
-### check the current identity
-GET http://localhost:5089/api/user/whoami
-X-API-KEY: xskLEaNQdMwXMj2PEqLBhcpUSL3VlrfQBPkoG5WQGANhUGmUO8WVlMyxfF30V2YMm2kwe4Dw9p1TLgrjvVUSTI4UTjzMFlDrrsi2sYAcDAe5BXvmzXonHsIYaetj4JCy

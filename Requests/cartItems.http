@@ -1,2 +1,0 @@
-GET http://localhost:5089/api/cart/11/items
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJpZGFlbGtvdXJpQGdtYWlsLmNvbSIsIm5iZiI6MTc2MzExODY3MiwiZXhwIjoxNzYzMTIyMjcyLCJpYXQiOjE3NjMxMTg2NzJ9.Qb3R7dqVXKaSHyQMj1ElqK-tuOSBB0_i4Dppnxd41OE
