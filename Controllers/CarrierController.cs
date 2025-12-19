@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 using Tradeflow.DTOs.Carrier;
 using Tradeflow.Helpers;
-
+using Microsoft.AspNetCore.Authorization;
 namespace LatestEcommAPI.Controllers;
 
 [ApiController]
@@ -13,6 +13,7 @@ public class CarrierController : ControllerBase
     // GET /api/carriers
     // ============================================================
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetCarriers([FromHeader(Name = "X-API-KEY")] string apiKey)
     {
         if (string.IsNullOrWhiteSpace(apiKey))
@@ -57,6 +58,7 @@ public class CarrierController : ControllerBase
     // POST /api/carriers
     // ============================================================
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> CreateCarrier(
         [FromHeader(Name = "X-API-KEY")] string apiKey,
         [FromBody] CreateCarrierDto dto)
@@ -97,6 +99,7 @@ public class CarrierController : ControllerBase
     // DELETE /api/carriers/{carrierId}
     // ============================================================
     [HttpDelete("{carrierId}")]
+    [Authorize]
     public async Task<IActionResult> DeleteCarrier(
         [FromHeader(Name = "X-API-KEY")] string apiKey,
         [FromRoute] int carrierId)

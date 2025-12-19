@@ -3,6 +3,7 @@ using Microsoft.Data.Sqlite;
 using LatestEcommAPI.DTOs.Order;
 using LatestEcommAPI.DTOs.ShipmentDetails;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LatestEcommAPI.Controllers
 {
@@ -14,6 +15,7 @@ namespace LatestEcommAPI.Controllers
         // GET SPECIFIC ORDER + ITEMS
         // ---------------------------------------------------------
         [HttpGet("{orderId}/items")]
+        [Authorize]
         public IActionResult GetOrderItems([FromRoute] int orderId)
         {
             using var connection = new SqliteConnection("Data Source=Data/db.db");
@@ -74,6 +76,7 @@ namespace LatestEcommAPI.Controllers
         // GET ALL ORDERS FOR USER (via API key)
         // ---------------------------------------------------------
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllOrders(
             [FromHeader] string X_API_KEY,
             [FromQuery] int size = 15,

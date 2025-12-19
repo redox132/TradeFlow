@@ -1,6 +1,7 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.AspNetCore.Mvc;
 using LatestEcommAPI.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LatestEcommAPI.Controllers;
 
@@ -9,6 +10,7 @@ namespace LatestEcommAPI.Controllers;
 public class CountryController : ControllerBase
 {
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetAllCountries()
     {
         using (var connection = new SqliteConnection("Data Source=Data/db.db"))

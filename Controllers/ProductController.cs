@@ -4,11 +4,13 @@ using LatestEcommAPI.Models;
 using Tradeflow.DTOs.Product;
 using Tradeflow.Helpers;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Tradeflowi.Controllers
 {
     [ApiController]
     [Route("api/products")]
+    [Authorize]
     public class ProductController : ControllerBase
     {
         [HttpGet]
@@ -83,11 +85,11 @@ namespace Tradeflowi.Controllers
             // ...
             using (var connection = new SqliteConnection("Data Source=Data/db.db"))
             {
-            if (!ModelState.IsValid)
-            {
-                // Model binding failed or validation rules were violated
-                return BadRequest(ModelState);
-            }
+                if (!ModelState.IsValid)
+                {
+                    // Model binding failed or validation rules were violated
+                    return BadRequest(ModelState);
+                }
                 await connection.OpenAsync();
 
                 // Get user ID

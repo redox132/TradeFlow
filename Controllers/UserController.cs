@@ -12,6 +12,7 @@ namespace LatestEcommAPI.Controllers;
 public class UserController : ControllerBase
 {
     [HttpGet("whoami")]
+    [Authorize]
     public async Task<IActionResult> WhoAmI([FromHeader(Name = "X-API-KEY")] string X_API_KEY)
     {
         using (var connection = new SqliteConnection("Data source=Data/db.db"))
