@@ -1,42 +1,75 @@
-using DotNetEnv;
-using Tradeflow.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
-using Tradeflow.Application.Interfaces;
-using Tradeflow.Application.Services.Auth;
 
-// Load .env variables
+
+using DotNetEnv;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
+using Tradeflow.Api.Extensions;
+using Tradeflow.Application.Interfaces.Auth;
+using Tradeflow.Application.Services.Auth;
+using Tradeflow.Infrastructure.Auth;
+using Tradeflow.Infrastructure.Data;
+
 Env.Load();
 Env.Load("../.env");
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
-builder.Services.AddOpenApi();
 builder.Services.AddControllers();
+
+// Swagger
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.OpenApiInfo
+    {
+        Title = "Tradeflow API",
+        Version = "v1"
+    });
+
+    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.ParameterLocation.Header,
+        Description = "Enter: Bearer {token}"
+    });
+
+    // Note: Security requirement configuration is omitted here to avoid
+    // assembly-type mismatches across Microsoft.OpenApi versions. If you
+    // need the Swagger UI to require a Bearer token, add the requirement
+    // after confirming the Microsoft.OpenApi package version in the Api
+    // project's dependencies.
+});
+
+// DI
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<ITokenService, JwtTokenService>();
+builder.Services.AddJwt(builder.Configuration);
 
-// Build PostgreSQL connection string from .env
-var connString = $"Host={Environment.GetEnvironmentVariable("DB_HOST")};" +
-                 $"Port={Environment.GetEnvironmentVariable("DB_PORT")};" +
-                 $"Database={Environment.GetEnvironmentVariable("DB_NAME")};" +
-                 $"Username={Environment.GetEnvironmentVariable("DB_USER")};" +
-                 $"Password={Environment.GetEnvironmentVariable("DB_PASSWORD")}";
+// PostgreSQL
+var connString =
+    $"Host={Environment.GetEnvironmentVariable("DB_HOST")};" +
+    $"Port={Environment.GetEnvironmentVariable("DB_PORT")};" +
+    $"Database={Environment.GetEnvironmentVariable("DB_NAME")};" +
+    $"Username={Environment.GetEnvironmentVariable("DB_USER")};" +
+    $"Password={Environment.GetEnvironmentVariable("DB_PASSWORD")}";
 
-// Register DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connString));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
 
-// Use PORT from .env (fallback to 3000)
 var port = Environment.GetEnvironmentVariable("PORT") ?? "3000";
 app.Run($"http://localhost:{port}");

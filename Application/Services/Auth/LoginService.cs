@@ -1,14 +1,18 @@
-using Tradeflow.Application.DTOs;
-using Tradeflow.Application.Interfaces;
+using Tradeflow.Application.Interfaces.Auth;
 
-namespace Tradeflow.Application.Services.Auth
+namespace Tradeflow.Application.Services.Auth;
+
+public class LoginService : ILoginService
 {
-    public class LoginService : ILoginService
+    private readonly ITokenService _tokenService;
+
+    public LoginService(ITokenService tokenService)
     {
-        public TestDTO Get(TestDTO testDTO)
-        {
-            testDTO.Name = "s";
-            return testDTO;
-        }
+        _tokenService = tokenService;
+    }
+
+    public string Login(string email, string password)
+    {
+        return _tokenService.GenerateToken(1, email);
     }
 }
