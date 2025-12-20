@@ -1,3 +1,11 @@
-obj/
-bin/
-.vscode
+Api/bin
+Api/obj
+
+Application/bin
+Application/obj
+
+Domain/bin
+Domain/obj
+
+Infrastructure/bin
+Infrastructure/obj
