@@ -7,11 +7,13 @@ public class LoginService : ILoginService
 {
     private readonly IUserRepository _userRepository;
     private readonly ITokenService _tokenService;
+    private readonly IPasswordService _passwordService;
 
-    public LoginService(IUserRepository userRepository, ITokenService tokenService)
+    public LoginService(IUserRepository userRepository, ITokenService tokenService, IPasswordService passwordService)
     {
         _userRepository = userRepository;
         _tokenService = tokenService;
+        _passwordService = passwordService;
     }
 
     public async Task<string> LoginAsync(string email, string password)
@@ -21,8 +23,10 @@ public class LoginService : ILoginService
         if (user == null)
             return "Invalid Creds";
 
-        // TODO: verify password hash
-        // if (!VerifyPassword(password, user.PasswordHash)) ...
+        if (!_passwordService.VerifyPassword(user.Password, password))
+        {
+            return "Invalid Creds";
+        }
 
         return _tokenService.GenerateToken(user.Id, user.Email);
     }

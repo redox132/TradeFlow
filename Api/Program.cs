@@ -48,6 +48,9 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<ITokenService, JwtTokenService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRegisterService, RegisterService>();
+builder.Services.AddScoped<IPasswordService, PasswordService>();
+
 builder.Services.AddJwt(builder.Configuration);
 
 // PostgreSQL
