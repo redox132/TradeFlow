@@ -6,9 +6,7 @@ namespace Tradeflow.Api.Extensions;
 
 public static class JwtExtensions
 {
-    public static IServiceCollection AddJwt(
-        this IServiceCollection services,
-        IConfiguration config)
+    public static IServiceCollection AddJwt(this IServiceCollection services, IConfiguration config)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>

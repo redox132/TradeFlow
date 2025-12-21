@@ -8,6 +8,8 @@ using Tradeflow.Application.Interfaces.Auth;
 using Tradeflow.Application.Services.Auth;
 using Tradeflow.Infrastructure.Auth;
 using Tradeflow.Infrastructure.Data;
+using Tradeflow.Infrastructure.Repositories;
+using Tradeflow.Application.Interfaces.Repositories;
 
 Env.Load();
 Env.Load("../.env");
@@ -45,6 +47,7 @@ builder.Services.AddSwaggerGen(c =>
 // DI
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<ITokenService, JwtTokenService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddJwt(builder.Configuration);
 
 // PostgreSQL
