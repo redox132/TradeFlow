@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Tradeflow.Application.DTOs.Auth;
-using Tradeflow.Application.Interfaces.Auth;
+using Tradeflow.Application.Interfaces.Services.Auth;
 using Tradeflow.Application.Services.Auth;
 using Tradeflow.Application.DTOs.ActionResults;
 using System.Threading.Tasks;

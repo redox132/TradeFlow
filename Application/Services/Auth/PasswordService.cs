@@ -1,6 +1,6 @@
 using System;
 using System.Security.Cryptography;
-using Tradeflow.Application.Interfaces.Auth;
+using Tradeflow.Application.Interfaces.Services.Auth;
 
 public class PasswordService : IPasswordService
 {

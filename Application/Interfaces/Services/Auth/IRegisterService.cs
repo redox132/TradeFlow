@@ -1,6 +1,6 @@
 using Tradeflow.Domain.Entities;
 
-namespace Tradeflow.Application.Interfaces.Auth;
+namespace Tradeflow.Application.Interfaces.Services.Auth;
 
 public interface IRegisterService
 {

@@ -1,4 +1,4 @@
-using Tradeflow.Application.Interfaces.Auth;
+using Tradeflow.Application.Interfaces.Services.Auth;
 using Tradeflow.Application.Interfaces.Repositories;
 using Tradeflow.Domain.Entities;
 
