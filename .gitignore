@@ -14,5 +14,5 @@ Domain/obj
 Infrastructure/bin
 Infrastructure/obj
 
-Tradeflow.Tests/bin
-Tradeflow.Tests/obj
+TradeflowApi/Tradeflow.Tests/bin
+TradeflowApi/Tradeflow.Tests/obj
