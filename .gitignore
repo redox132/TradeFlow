@@ -13,3 +13,6 @@ Domain/obj
 
 Infrastructure/bin
 Infrastructure/obj
+
+Tradeflow.Tests/bin
+Tradeflow.Tests/obj
