@@ -9,6 +9,8 @@ using Tradeflow.TradeflowApi.Application.DTOs.Repositories.Products;
 
 namespace Tradeflow.TradeflowApi.Api.Controllers.Services;
 
+[ApiController]
+[Route("api")]
 public class ProductController : ControllerBase
 {
     private readonly IProductService _productService;

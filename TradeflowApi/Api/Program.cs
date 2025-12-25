@@ -12,6 +12,7 @@ using Tradeflow.TradeflowApi.Infrastructure.Repositories;
 using Tradeflow.TradeflowApi.Application.Interfaces.Repositories;
 using Tradeflow.TradeflowApi.Application.Interfaces.Services;
 using Tradeflow.TradeflowApi.Application.Services.Repositories;
+using Tradeflow.TradeflowApi.Application.Interfaces.Services.Repositories;
 
 Env.Load();
 Env.Load("../../.env");
@@ -54,6 +55,8 @@ builder.Services.AddScoped<IRegisterService, RegisterService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+builder.Services.AddScoped<ICountryService, CountryService>();
 
 builder.Services.AddJwt(builder.Configuration);
 
