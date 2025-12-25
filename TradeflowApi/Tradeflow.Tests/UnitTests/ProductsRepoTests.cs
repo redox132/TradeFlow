@@ -5,7 +5,7 @@ using Tradeflow.TradeflowApi.Application.Services.Repositories;
 using Tradeflow.TradeflowApi.Application.Interfaces.Repositories;
 using Tradeflow.TradeflowApi.Domain.Entities;
 
-namespace Tradeflow.TradeflowApi.Tests.UnitTests;
+namespace Tradeflow.TradeflowApi.Tradeflow.Tests.UnitTests;
 
 public class ProductsRepoTests
 {

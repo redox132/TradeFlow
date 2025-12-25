@@ -1,5 +1,5 @@
 
-namespace Tradeflow.TradeflowApi.Tests.UnitTests;
+namespace Tradeflow.TradeflowApi.Tradeflow.Tests.UnitTests;
 
 public class DbConnectionTests
 {
