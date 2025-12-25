@@ -1,5 +1,5 @@
 
-namespace Tradeflow.TradeflowApi.Application.DTOs.Respositories.Products
+namespace Tradeflow.TradeflowApi.Application.DTOs.Repositories.Products
 {
     public class CreateProductRequest
     {

@@ -5,6 +5,7 @@ using Tradeflow.TradeflowApi.Domain.Entities;
 using Tradeflow.TradeflowApi.Application.DTOs.ActionResults;
 using Tradeflow.TradeflowApi.Application.Interfaces.Services;
 using Tradeflow.TradeflowApi.Application.Interfaces.Services.Auth;
+using Tradeflow.TradeflowApi.Application.DTOs.Repositories.Products;
 
 namespace Tradeflow.TradeflowApi.Api.Controllers.Services;
 
@@ -43,9 +44,23 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost("products")]
-    public async Task<IActionResult> Create([FromBody] Product product)
+    public async Task<IActionResult> Create([FromBody] CreateProductRequest product)
     {
         await _productService.CreateProductAsync(product);
         return Ok(product);
+    }
+
+    [HttpPut("products/{id}")]
+    public async Task<IActionResult> Update(int id, [FromBody] CreateProductRequest product)
+    {
+        await _productService.UpdateProductAsync(id, product);
+        return NoContent();
+    }
+
+    [HttpDelete("products/{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        await _productService.DeleteProductAsync(id);
+        return NoContent();
     }
 }

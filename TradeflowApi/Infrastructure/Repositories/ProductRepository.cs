@@ -4,6 +4,7 @@ using Tradeflow.TradeflowApi.Application.Interfaces.Repositories;
 using Tradeflow.TradeflowApi.Domain.Entities;
 using Tradeflow.TradeflowApi.Infrastructure.Data;
 using Tradeflow.TradeflowApi.Application.DTOs.ActionResults;
+using Tradeflow.TradeflowApi.Application.DTOs.Repositories.Products;
 
 namespace Tradeflow.TradeflowApi.Infrastructure.Repositories;
 
@@ -50,17 +51,35 @@ public class ProductRepository : IProductRepository
         return product;
     }
 
-    public async Task<Product?> UpdateAsync(Product product)
+    public async Task<CreateProductRequest?> UpdateAsync(int id, CreateProductRequest product)
     {
-        _context.Products.Update(product);
+        var existingProduct = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+        if (existingProduct == null)
+            return null;
+
+        existingProduct.Name = product.Name;
+        existingProduct.Description = product.Description;
+        existingProduct.SKU = product.SKU;
+        existingProduct.Price = product.Price;
+        existingProduct.StockQuantity = product.StockQuantity;
+
+        _context.Products.Update(existingProduct);
         await _context.SaveChangesAsync();
         return product;
     }
 
-    public async Task<Product?> CreateAsync(Product product)
+    public async Task<CreateProductRequest?> CreateAsync(CreateProductRequest request)
     {
+        Product product = new Product
+        {
+            Name = request.Name,
+            Description = request.Description,
+            SKU = request.SKU,
+            Price = request.Price,
+            StockQuantity = request.StockQuantity
+        };
         await _context.Products.AddAsync(product);
         await _context.SaveChangesAsync();
-        return product;
+        return request;
     }
 }
