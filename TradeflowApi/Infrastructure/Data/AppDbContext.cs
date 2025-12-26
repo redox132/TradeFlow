@@ -12,7 +12,7 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
 
-    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<Seller> Sellers { get; set; } = null!;
     public DbSet<Order> Orders { get; set; } = null!;
     public DbSet<Product> Products { get; set; } = null!;
     public DbSet<OrderItem> OrderItems { get; set; } = null!;
@@ -20,4 +20,5 @@ public class AppDbContext : DbContext
     public DbSet<ShipmentMethod> ShipmentMethods { get; set; } = null!;
     public DbSet<Address> Addresses { get; set; } = null!;
     public DbSet<Customer> Customers { get; set; } = null!;
+    public DbSet<Invoice> Invoices { get; set; } = null!;
 }

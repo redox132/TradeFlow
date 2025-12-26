@@ -1,18 +1,19 @@
 
 
-using DotNetEnv;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi;
-using Tradeflow.TradeflowApi.Api.Extensions;
+using Tradeflow.TradeflowApi.Application.Interfaces.Services.Repositories;
 using Tradeflow.TradeflowApi.Application.Interfaces.Services.Auth;
+using Tradeflow.TradeflowApi.Application.Interfaces.Repositories;
+using Tradeflow.TradeflowApi.Application.Services.Repositories;
+using Tradeflow.TradeflowApi.Application.Interfaces.Services;
+using Tradeflow.TradeflowApi.Infrastructure.Repositories;
 using Tradeflow.TradeflowApi.Application.Services.Auth;
 using Tradeflow.TradeflowApi.Infrastructure.Auth;
 using Tradeflow.TradeflowApi.Infrastructure.Data;
-using Tradeflow.TradeflowApi.Infrastructure.Repositories;
-using Tradeflow.TradeflowApi.Application.Interfaces.Repositories;
-using Tradeflow.TradeflowApi.Application.Interfaces.Services;
-using Tradeflow.TradeflowApi.Application.Services.Repositories;
-using Tradeflow.TradeflowApi.Application.Interfaces.Services.Repositories;
+using Tradeflow.TradeflowApi.Api.Extensions;
+using Tradeflow.Application.Services.Auth;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
+using DotNetEnv;
 
 Env.Load();
 Env.Load("../../.env");
@@ -67,6 +68,9 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+
+builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 
 builder.Services.AddJwt(builder.Configuration);
 

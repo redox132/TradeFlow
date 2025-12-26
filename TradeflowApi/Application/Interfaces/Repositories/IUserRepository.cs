@@ -4,7 +4,7 @@ namespace Tradeflow.TradeflowApi.Application.Interfaces.Repositories;
 
 public interface IUserRepository
 {
-    Task<User?> GetByEmailAsync(string email);
-    Task<User?> GetByIdAsync(int UserId);
-    Task<User?> CreateAsync(User user);
+    Task<Seller?> GetByEmailAsync(string email);
+    Task<Seller?> GetByIdAsync(int sellerId);
+    Task<Seller?> CreateAsync(Seller seller);
 }

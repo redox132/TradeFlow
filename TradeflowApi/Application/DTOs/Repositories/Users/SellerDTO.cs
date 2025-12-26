@@ -1,7 +1,7 @@
 
-namespace Tradeflow.TradeflowApi.Domain.Entities.Users;
+namespace Tradeflow.TradeflowApi.Application.DTOs.Repositories.Users;
 
-public class GetUserDTO
+public class SellerDTO
 {
     public required string Name { get; set; }
     public required string Email { get; set; }
