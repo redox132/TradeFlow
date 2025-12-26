@@ -5,8 +5,8 @@ namespace Tradeflow.TradeflowApi.Application.Interfaces.Repositories;
 
 public interface IOrderRepository
 {
-    Task<IEnumerable<Order>> GetOrdersAsync();
-    Task<Order> GetOrderByIdAsync(int id);
-    Task<Order> CreateOrderAsync(CreateOrderRequest order);
+    Task<List<OrderDTO>> GetOrdersAsync(int pageNumber, int pageSize);
+    Task<List<OrderDTO>> GetOrderByIdAsync(int id);
     Task<Order> DeleteOrderAsync(int id);
+    Task<OrderResponse> CreateOrderAsync(CreateOrderRequest order);
 }

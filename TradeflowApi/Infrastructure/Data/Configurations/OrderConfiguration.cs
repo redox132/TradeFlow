@@ -8,8 +8,8 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
     {
         builder.HasKey(o => o.Id);
 
-        builder.HasOne(o => o.User)
+        builder.HasOne(o => o.Customer)
                .WithMany()
-               .HasForeignKey(o => o.UserId);
+               .HasForeignKey(o => o.CustomerId);
     }
 }

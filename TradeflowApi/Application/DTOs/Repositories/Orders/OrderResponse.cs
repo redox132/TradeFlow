@@ -4,8 +4,9 @@ using Tradeflow.TradeflowApi.Application.DTOs.Repositories.OrderItems;
 using Tradeflow.TradeflowApi.Application.DTOs.Repositories.Customers;
 using Tradeflow.TradeflowApi.Domain.Enums;
 
-public class CreateOrderRequest
+public class OrderResponse
 {
-    public ICollection<CreateOrderItemRequest> OrderItems { get; set; } = new List<CreateOrderItemRequest>();
+    public ICollection<OrderItemsDTO> OrderItems { get; set; } = new List<OrderItemsDTO>();
     public CustomerDTO CustomerDTO { get; set; } = null!;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

@@ -18,4 +18,6 @@ public class AppDbContext : DbContext
     public DbSet<OrderItem> OrderItems { get; set; } = null!;
     public DbSet<Country> Countries { get; set; } = null!;
     public DbSet<ShipmentMethod> ShipmentMethods { get; set; } = null!;
+    public DbSet<Address> Addresses { get; set; } = null!;
+    public DbSet<Customer> Customers { get; set; } = null!;
 }

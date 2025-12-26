@@ -17,9 +17,9 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet("orders")]
-    public async Task<IActionResult> GetOrders()
+    public async Task<IActionResult> GetOrders(int pageSize = 1, int pageNumber = 100)
     {
-        var orders = await _orderService.GetOrdersAsync();
+        var orders = await _orderService.GetOrdersAsync(pageSize, pageNumber);
         return Ok(orders);
     }
 
@@ -30,12 +30,6 @@ public class OrderController : ControllerBase
         return Ok(order);
     }
 
-    [HttpPost("order")]
-    public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest order)
-    {
-        var createdOrder = await _orderService.CreateOrderAsync(order);
-        return CreatedAtAction(nameof(GetOrder), new { id = createdOrder.Id }, createdOrder);
-    }
 
     [HttpDelete("order/{id}")]
     public async Task<IActionResult> DeleteOrder(int id)
@@ -45,9 +39,16 @@ public class OrderController : ControllerBase
         {
             return NotFound();
         }
-        
+
         await _orderService.DeleteOrderAsync(id);
 
         return Ok(new { message = "Order deleted successfully" });
+    }
+
+    [HttpPost("order")]
+    public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest order)
+    {
+        var createdOrder = await _orderService.CreateOrderAsync(order);
+        return Ok(createdOrder);
     }
 }

@@ -1,6 +1,6 @@
 using Tradeflow.TradeflowApi.Application.Interfaces.Services.Repositories;
 using Tradeflow.TradeflowApi.Application.Interfaces.Repositories;
-using Tradeflow.TradeflowApi.Domain.Entities;
+using Tradeflow.TradeflowApi.Application.DTOs.Repositories.Countries;
 
 namespace Tradeflow.TradeflowApi.Application.Services.Repositories;
 
@@ -13,7 +13,7 @@ public class CountryService : ICountryService
         _countryRepository = countryRepository;
     }
 
-    public async Task<IEnumerable<Country>> GetCountriesAsync()
+    public async Task<IEnumerable<CountryDTO>> GetCountriesAsync()
     {
         return await _countryRepository.GetCountriesAsync();
     }
