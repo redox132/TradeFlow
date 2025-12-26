@@ -15,20 +15,20 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task<User?> GetByEmailAsync(string email)
+    public async Task<Seller?> GetByEmailAsync(string email)
     {
-        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        return await _context.Sellers.FirstOrDefaultAsync(u => u.Email == email);
     }
 
-    public async Task<User?> GetByIdAsync(int id)
+    public async Task<Seller?> GetByIdAsync(int id)
     {
-        return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        return await _context.Sellers.FirstOrDefaultAsync(u => u.Id == id);
     }
 
-    public async Task<User?> CreateAsync(User user)
+    public async Task<Seller?> CreateAsync(Seller seller)
     {
-        await _context.Users.AddAsync(user);
+        await _context.Sellers.AddAsync(seller);
         await _context.SaveChangesAsync();
-        return user;
+        return seller;
     }
 }

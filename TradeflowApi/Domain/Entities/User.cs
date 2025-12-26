@@ -1,7 +1,7 @@
 
 namespace Tradeflow.TradeflowApi.Domain.Entities;
 
-public class User
+public class Seller
 {
     public int Id { get; set; }
     public required string Name { get; set; }

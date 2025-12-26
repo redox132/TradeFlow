@@ -2,7 +2,7 @@ using Tradeflow.TradeflowApi.Application.Interfaces.Services.Auth;
 using Tradeflow.TradeflowApi.Application.Interfaces.Repositories;
 using Tradeflow.TradeflowApi.Domain.Entities;
 
-namespace Tradeflow.TradeflowApi.Application.Services.Auth;
+namespace Tradeflow.Application.Services.Auth;
 
 public class RegisterService : IRegisterService
 {
@@ -15,21 +15,21 @@ public class RegisterService : IRegisterService
         _passwordService = passwordService;
     }
 
-    public async Task<User?> RegisterAsync(string name, string email, string password)
+    public async Task<Seller?> RegisterAsync(string name, string email, string password)
     {
-        var userExists = await _userRepository.GetByEmailAsync(email);
-        if (userExists != null)
+        var sellerExists = await _userRepository.GetByEmailAsync(email);
+        if (sellerExists != null)
         {
             return null;
         }
 
-        var user = new User
+        var seller = new Seller
         {
             Name = name,
             Email = email,
             Password = _passwordService.HashPassword(password)
         };
 
-        return await _userRepository.CreateAsync(user);
+        return await _userRepository.CreateAsync(seller);
     }
 }
