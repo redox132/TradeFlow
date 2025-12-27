@@ -1,9 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
-using Tradeflow.TradeflowApi.Application.DTOs.Auth;
+namespace Tradeflow.TradeflowApi.Api.Controllers.Auth;
+
 using Tradeflow.TradeflowApi.Application.Interfaces.Services.Auth;
 using Tradeflow.TradeflowApi.Application.Services.Auth;
+using Tradeflow.TradeflowApi.Application.DTOs.Auth;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Tradeflow.TradeflowApi.Api.Controllers.Auth;
 
 [ApiController]
 [Route("api/auth")]

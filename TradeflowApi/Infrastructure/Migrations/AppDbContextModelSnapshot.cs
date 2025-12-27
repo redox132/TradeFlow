@@ -61,6 +61,31 @@ namespace Infrastructure.Migrations
                     b.ToTable("Addresses");
                 });
 
+            modelBuilder.Entity("Tradeflow.TradeflowApi.Domain.Entities.ApiKey", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("SellerId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SellerId");
+
+                    b.ToTable("ApiKeys");
+                });
+
             modelBuilder.Entity("Tradeflow.TradeflowApi.Domain.Entities.Country", b =>
                 {
                     b.Property<int>("Id")
@@ -111,11 +136,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Tradeflow.TradeflowApi.Domain.Entities.Invoice", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -124,11 +149,16 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("SellerId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
+
+                    b.HasIndex("SellerId");
 
                     b.ToTable("Invoices");
                 });
@@ -227,6 +257,31 @@ namespace Infrastructure.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("Tradeflow.TradeflowApi.Domain.Entities.Seller", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Sellers");
+                });
+
             modelBuilder.Entity("Tradeflow.TradeflowApi.Domain.Entities.ShipmentMethod", b =>
                 {
                     b.Property<int>("Id")
@@ -263,31 +318,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("ShipmentMethods");
                 });
 
-            modelBuilder.Entity("Tradeflow.TradeflowApi.Domain.Entities.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
             modelBuilder.Entity("Tradeflow.TradeflowApi.Domain.Entities.Address", b =>
                 {
                     b.HasOne("Tradeflow.TradeflowApi.Domain.Entities.Country", "Country")
@@ -297,6 +327,17 @@ namespace Infrastructure.Migrations
                     b.Navigation("Country");
                 });
 
+            modelBuilder.Entity("Tradeflow.TradeflowApi.Domain.Entities.ApiKey", b =>
+                {
+                    b.HasOne("Tradeflow.TradeflowApi.Domain.Entities.Seller", "Seller")
+                        .WithMany()
+                        .HasForeignKey("SellerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Seller");
+                });
+
             modelBuilder.Entity("Tradeflow.TradeflowApi.Domain.Entities.Customer", b =>
                 {
                     b.HasOne("Tradeflow.TradeflowApi.Domain.Entities.Address", "Address")
@@ -304,6 +345,17 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("AddressId");
 
                     b.Navigation("Address");
+                });
+
+            modelBuilder.Entity("Tradeflow.TradeflowApi.Domain.Entities.Invoice", b =>
+                {
+                    b.HasOne("Tradeflow.TradeflowApi.Domain.Entities.Seller", "Seller")
+                        .WithMany()
+                        .HasForeignKey("SellerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Seller");
                 });
 
             modelBuilder.Entity("Tradeflow.TradeflowApi.Domain.Entities.Order", b =>

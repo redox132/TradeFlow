@@ -1,7 +1,7 @@
+namespace Tradeflow.TradeflowApi.Application.Services.Auth;
+
 using Tradeflow.TradeflowApi.Application.Interfaces.Services.Auth;
 using Tradeflow.TradeflowApi.Application.Interfaces.Repositories;
-
-namespace Tradeflow.TradeflowApi.Application.Services.Auth;
 
 public class LoginService : ILoginService
 {

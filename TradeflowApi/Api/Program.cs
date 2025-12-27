@@ -1,12 +1,12 @@
-
-
 using Tradeflow.TradeflowApi.Application.Interfaces.Services.Repositories;
 using Tradeflow.TradeflowApi.Application.Interfaces.Services.Auth;
 using Tradeflow.TradeflowApi.Application.Interfaces.Repositories;
 using Tradeflow.TradeflowApi.Application.Services.Repositories;
+using Tradeflow.TradeflowApi.Infrastructure.Repositories.Auth;
 using Tradeflow.TradeflowApi.Application.Interfaces.Services;
 using Tradeflow.TradeflowApi.Infrastructure.Repositories;
 using Tradeflow.TradeflowApi.Application.Services.Auth;
+using Tradeflow.TradeflowApi.Api.Middlewares.Auth;
 using Tradeflow.TradeflowApi.Infrastructure.Auth;
 using Tradeflow.TradeflowApi.Infrastructure.Data;
 using Tradeflow.TradeflowApi.Api.Extensions;
@@ -22,7 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// Swagger
+// Swagger - updated for API Key
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new Microsoft.OpenApi.OpenApiInfo
@@ -31,48 +31,39 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1"
     });
 
-    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.OpenApiSecurityScheme
+    // Remove JWT/Bearer definition
+    // Add API Key definition instead
+    c.AddSecurityDefinition("ApiKey", new Microsoft.OpenApi.OpenApiSecurityScheme
     {
-        Name = "Authorization",
-        Type = Microsoft.OpenApi.SecuritySchemeType.Http,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
+        Description = "API Key needed to access the endpoints. Example: X-API-KEY: {your_api_key}",
         In = Microsoft.OpenApi.ParameterLocation.Header,
-        Description = "Enter: Bearer {token}"
+        Name = "X-API-KEY",
+        Type = Microsoft.OpenApi.SecuritySchemeType.ApiKey
     });
-
-    // Note: Security requirement configuration is omitted here to avoid
-    // assembly-type mismatches across Microsoft.OpenApi versions. If you
-    // need the Swagger UI to require a Bearer token, add the requirement
-    // after confirming the Microsoft.OpenApi package version in the Api
-    // project's dependencies.
+    // Note: security requirement omitted to avoid type mismatches across Microsoft.OpenApi versions.
 });
 
 // DI
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<ITokenService, JwtTokenService>();
-
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRegisterService, RegisterService>();
-
 builder.Services.AddScoped<IPasswordService, PasswordService>();
-
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 builder.Services.AddScoped<ICountryService, CountryService>();
-
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
-
 builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
+builder.Services.AddScoped<IApiKeyService, ApiKeyService>();
+builder.Services.AddScoped<IApiKeyRepository, ApiKeyRepository>();
 
-builder.Services.AddJwt(builder.Configuration);
+// Remove JWT middleware if not used
+// builder.Services.AddJwt(builder.Configuration);
 
 // PostgreSQL
 var connString =
@@ -93,7 +84,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseAuthentication();
+app.UseHttpsRedirection();
+
+// API Key middleware
+app.UseMiddleware<ApiKeyMiddleware>();
+
+// Remove JWT authentication if not applicable
+// app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

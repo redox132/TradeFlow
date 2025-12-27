@@ -1,9 +1,9 @@
+namespace Tradeflow.TradeflowApi.Infrastructure.Repositories;
+
 using Tradeflow.TradeflowApi.Application.Interfaces.Repositories;
 using Tradeflow.TradeflowApi.Infrastructure.Data;
 using Tradeflow.TradeflowApi.Application.DTOs.Repositories.Countries;
 using Microsoft.EntityFrameworkCore;
-
-namespace Tradeflow.TradeflowApi.Infrastructure.Repositories;
 
 public class CountryRepository : ICountryRepository
 {

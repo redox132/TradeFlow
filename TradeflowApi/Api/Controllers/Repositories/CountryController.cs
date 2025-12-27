@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Tradeflow.TradeflowApi.Application.Interfaces.Services.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Tradeflow.TradeflowApi.Api.Controllers.Repositories;
 

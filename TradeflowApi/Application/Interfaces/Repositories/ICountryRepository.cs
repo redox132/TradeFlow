@@ -1,6 +1,6 @@
-using Tradeflow.TradeflowApi.Application.DTOs.Repositories.Countries;
-
 namespace Tradeflow.TradeflowApi.Application.Interfaces.Repositories;
+
+using Tradeflow.TradeflowApi.Application.DTOs.Repositories.Countries;
 
 public interface ICountryRepository
 {
