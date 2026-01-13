@@ -19,7 +19,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// Swagger - updated for API Key
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new Microsoft.OpenApi.OpenApiInfo
@@ -28,10 +27,8 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1"
     });
 
-    // Remove JWT/Bearer definition
-    // Add API Key definition instead
     c.AddSecurityDefinition("ApiKey", new Microsoft.OpenApi.OpenApiSecurityScheme
-    {
+    { 
         Description = "API Key needed to access the endpoints. Example: X-API-KEY: {your_api_key}",
         In = Microsoft.OpenApi.ParameterLocation.Header,
         Name = "X-API-KEY",
@@ -39,10 +36,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// DI
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
@@ -56,10 +51,7 @@ builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 builder.Services.AddScoped<IApiKeyService, ApiKeyService>();
 builder.Services.AddScoped<IApiKeyRepository, ApiKeyRepository>();
 
-// Remove JWT middleware if not used
-// builder.Services.AddJwt(builder.Configuration);
 
-// PostgreSQL
 var connString =
     $"Host={Environment.GetEnvironmentVariable("DB_HOST")};" +
     $"Port={Environment.GetEnvironmentVariable("DB_PORT")};" +
@@ -78,14 +70,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
-// API Key middleware
 app.UseMiddleware<ApiKeyMiddleware>();
 
-// Remove JWT authentication if not applicable
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapControllers();
 
