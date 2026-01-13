@@ -10,5 +10,5 @@ public class AddressDTO
     public string? PostCode { get; set; }
     public string? City { get; set; }
     public string? State { get; set; }
-    public CountryDTO? CountryDTO { get; set; }
+    public CountryDTO? Country_details { get; set; }
 }

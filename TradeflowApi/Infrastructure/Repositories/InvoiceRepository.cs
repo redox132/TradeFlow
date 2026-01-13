@@ -43,18 +43,15 @@ public class InvoiceRepository : IInvoiceRepository
 
     public async Task<InvoiceDTO> CreateInvoice(CreateInvoiceRequest request)
     {
-        // 1️⃣ Map DTO → ENTITY
         var invoiceEntity = new Invoice
         {
             Type = request.Invoice.Type,
             Number = request.Invoice.Number
         };
 
-        // 2️⃣ Save ENTITY
         _appDbContext.Invoices.Add(invoiceEntity);
         await _appDbContext.SaveChangesAsync();
 
-        // 3️⃣ Map ENTITY → DTO
         return new InvoiceDTO
         {
             Type = invoiceEntity.Type,
@@ -62,4 +59,15 @@ public class InvoiceRepository : IInvoiceRepository
         };
     }
 
+    public async Task<bool> DeleteInvoice(int invoiceId)
+    {
+        var invoice = await _appDbContext.Invoices.FindAsync(invoiceId);
+        if (invoice != null)
+        {
+            _appDbContext.Invoices.Remove(invoice);
+            await _appDbContext.SaveChangesAsync();
+            return true;
+        }
+        return false;
+    }
 }

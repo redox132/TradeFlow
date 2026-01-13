@@ -23,10 +23,14 @@ public class CustomerController : ControllerBase
     }
 
     [HttpGet("customer/{id}")]
-    public async Task<Customer> GetCustomer(int id)
+    public async Task<IActionResult> GetCustomer(int id)
     {
         var customer = await _customerService.GetCustomer(id);
-        return customer;
+        if (customer == null)
+        {
+            return Ok( new {message = "No customer found!", status = 404});
+        }
+        return Ok(customer);
     }
 
     [HttpPost("customers")]

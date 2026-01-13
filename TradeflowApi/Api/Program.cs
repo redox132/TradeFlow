@@ -6,7 +6,7 @@ using Tradeflow.TradeflowApi.Infrastructure.Repositories.Auth;
 using Tradeflow.TradeflowApi.Application.Interfaces.Services;
 using Tradeflow.TradeflowApi.Infrastructure.Repositories;
 using Tradeflow.TradeflowApi.Application.Services.Auth;
-using Tradeflow.TradeflowApi.Api.Middlewares.Auth;
+// using Tradeflow.TradeflowApi.Api.Middlewares.Auth;
 using Tradeflow.TradeflowApi.Infrastructure.Auth;
 using Tradeflow.TradeflowApi.Infrastructure.Data;
 using Tradeflow.TradeflowApi.Api.Extensions;
@@ -87,7 +87,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // API Key middleware
-app.UseMiddleware<ApiKeyMiddleware>();
+// app.UseMiddleware<ApiKeyMiddleware>();
 
 // Remove JWT authentication if not applicable
 // app.UseAuthentication();

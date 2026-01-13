@@ -47,10 +47,10 @@ public class OrderRepository : IOrderRepository
 
                 CustomerDTO = new CustomerDTO
                 {
-                    FName = o.Customer.FName,
-                    LName = o.Customer.LName,
+                    First_name = o.Customer.FName,
+                    Last_name = o.Customer.LName,
                     Email = o.Customer.Email,
-                    AddressDTO = o.Customer.Address == null ? null : new AddressDTO
+                    Address_detaills = o.Customer.Address == null ? null : new AddressDTO
                     {
                         Street = o.Customer.Address.Street,
                         HouseNumber = o.Customer.Address.HouseNumber,
@@ -58,7 +58,7 @@ public class OrderRepository : IOrderRepository
                         PostCode = o.Customer.Address.PostCode,
                         City = o.Customer.Address.City,
                         State = o.Customer.Address.State,
-                        CountryDTO = o.Customer.Address.Country == null ? null : new CountryDTO
+                        Country_details = o.Customer.Address.Country == null ? null : new CountryDTO
                         {
                             Name = o.Customer.Address.Country.Name,
                             Code = o.Customer.Address.Country.Code
@@ -90,11 +90,11 @@ public class OrderRepository : IOrderRepository
 
                 CustomerDTO = new CustomerDTO
                 {
-                    FName = o.Customer.FName,
-                    LName = o.Customer.LName,
+                    First_name = o.Customer.FName,
+                    Last_name = o.Customer.LName,
                     Email = o.Customer.Email,
 
-                    AddressDTO = o.Customer.Address == null ? null : new AddressDTO
+                    Address_detaills = o.Customer.Address == null ? null : new AddressDTO
                     {
                         Street = o.Customer.Address.Street,
                         HouseNumber = o.Customer.Address.HouseNumber,
@@ -103,7 +103,7 @@ public class OrderRepository : IOrderRepository
                         City = o.Customer.Address.City,
                         State = o.Customer.Address.State,
 
-                        CountryDTO = o.Customer.Address.Country == null ? null : new CountryDTO
+                        Country_details = o.Customer.Address.Country == null ? null : new CountryDTO
                         {
                             Name = o.Customer.Address.Country.Name,
                             Code = o.Customer.Address.Country.Code

@@ -26,4 +26,9 @@ public class InvoiceService : IInvoiceService
     {
         return await _invoiceRepository.CreateInvoice(request);
     }
+
+    public async Task<bool> DeleteInvoice(int invoiceId)
+    {
+        return await _invoiceRepository.DeleteInvoice(invoiceId);
+    }
 }

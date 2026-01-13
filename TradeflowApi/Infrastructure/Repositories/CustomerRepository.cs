@@ -25,10 +25,10 @@ public class CustomerRepository : ICustomerRepository
             .Take(pageSize)
             .Select(c => new CustomerDTO
             {
-                FName = c.FName,
-                LName = c.LName,
+                First_name = c.FName,
+                Last_name = c.LName,
                 Email = c.Email,
-                AddressDTO = c.Address == null ? null : new AddressDTO
+                Address_detaills = c.Address == null ? null : new AddressDTO
                 {
                     Street = c.Address.Street,
                     HouseNumber = c.Address.HouseNumber,
@@ -36,7 +36,7 @@ public class CustomerRepository : ICustomerRepository
                     PostCode = c.Address.PostCode,
                     City = c.Address.City,
                     State = c.Address.State,
-                    CountryDTO = c.Address.Country == null ? null : new CountryDTO
+                    Country_details = c.Address.Country == null ? null : new CountryDTO
                     {
                         Name = c.Address.Country.Name,
                         Code = c.Address.Country.Code
@@ -64,29 +64,29 @@ public class CustomerRepository : ICustomerRepository
     {
         var customer = new Customer
         {
-            FName = request.FName,
-            LName = request.LName,
+            FName = request.First_name,
+            LName = request.Last_name,
             Email = request.Email,
             Address = new Address
             {
-                Street = request.AddressDTO.Street,
-                HouseNumber = request.AddressDTO.HouseNumber,
-                FlatNumber = request.AddressDTO.FlatNumber,
-                PostCode = request.AddressDTO.PostCode,
-                City = request.AddressDTO.City,
-                State = request.AddressDTO.State,
+                Street = request.Address_detaills.Street,
+                HouseNumber = request.Address_detaills.HouseNumber,
+                FlatNumber = request.Address_detaills.FlatNumber,
+                PostCode = request.Address_detaills.PostCode,
+                City = request.Address_detaills.City,
+                State = request.Address_detaills.State,
                 Country = new Country
                 {
-                    Name = request.AddressDTO.CountryDTO.Name,
-                    Code = request.AddressDTO.CountryDTO.Code
+                    Name = request.Address_detaills.Country_details.Name,
+                    Code = request.Address_detaills.Country_details.Code
                 }
             }
         };
 
-        _appDbContext.Customers.Add(customer); // ✅ ENTITY
+        _appDbContext.Customers.Add(customer);
         await _appDbContext.SaveChangesAsync();
 
-        return customer; // ✅ ENTITY
+        return customer;
     }
 
 }

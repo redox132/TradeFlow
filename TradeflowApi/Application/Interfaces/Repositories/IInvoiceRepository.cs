@@ -7,4 +7,5 @@ public interface IInvoiceRepository
     Task<List<GetInvoiceRequest>> GetInvoices(int pageNUmber, int pageSize);
     Task<List<InvoiceDTO>> GetInvoice(int id);
     Task<InvoiceDTO> CreateInvoice(CreateInvoiceRequest request);
+    Task<bool> DeleteInvoice(int invoiceId);
 }

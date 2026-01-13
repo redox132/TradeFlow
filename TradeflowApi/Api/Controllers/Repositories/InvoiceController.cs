@@ -36,4 +36,15 @@ public class InvoiceController : ControllerBase
         var invoice = await _invoiceService.CreateInvoice(request);
         return Ok(invoice);
     }
+
+    [HttpDelete("invoice/{invoiceId}")]
+    public async Task<IActionResult> DeleteInvoice(int invoiceId)
+    {
+        var isDeleted = await _invoiceService.DeleteInvoice(invoiceId);
+        if (isDeleted)
+        {
+            return Ok(new { message = "Invoice has been deleted!", status = 200 });
+        }
+        return NotFound(new { message = "Invoice has not been found!", status = 404 });
+    }
 }
