@@ -6,11 +6,8 @@ using Tradeflow.TradeflowApi.Infrastructure.Repositories.Auth;
 using Tradeflow.TradeflowApi.Application.Interfaces.Services;
 using Tradeflow.TradeflowApi.Infrastructure.Repositories;
 using Tradeflow.TradeflowApi.Application.Services.Auth;
-// using Tradeflow.TradeflowApi.Api.Middlewares.Auth;
-using Tradeflow.TradeflowApi.Infrastructure.Auth;
+using Tradeflow.TradeflowApi.Api.Middlewares.Auth;
 using Tradeflow.TradeflowApi.Infrastructure.Data;
-using Tradeflow.TradeflowApi.Api.Extensions;
-using Tradeflow.Application.Services.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using DotNetEnv;
@@ -40,15 +37,12 @@ builder.Services.AddSwaggerGen(c =>
         Name = "X-API-KEY",
         Type = Microsoft.OpenApi.SecuritySchemeType.ApiKey
     });
-    // Note: security requirement omitted to avoid type mismatches across Microsoft.OpenApi versions.
 });
 
 // DI
-builder.Services.AddScoped<ILoginService, LoginService>();
-builder.Services.AddScoped<ITokenService, JwtTokenService>();
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IRegisterService, RegisterService>();
-builder.Services.AddScoped<IPasswordService, PasswordService>();
+
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
@@ -87,10 +81,10 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // API Key middleware
-// app.UseMiddleware<ApiKeyMiddleware>();
+app.UseMiddleware<ApiKeyMiddleware>();
 
 // Remove JWT authentication if not applicable
-// app.UseAuthentication();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

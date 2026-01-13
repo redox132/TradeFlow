@@ -6,6 +6,7 @@ namespace Tradeflow.TradeflowApi.Api.Controllers.Repositories;
 
 [ApiController]
 [Route("api")]
+[Authorize]
 public class CountryController : ControllerBase
 {
     private readonly ICountryService _countryService;
