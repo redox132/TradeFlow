@@ -1,0 +1,6 @@
+{
+  "Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/Users\/rida\/rida\/wmu\/OOP\/Tradeflow\/TradeflowApi\/Api",
+  "Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/Users\/rida\/rida\/wmu\/OOP\/Tradeflow\/TradeflowApi\/Application",
+  "Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/Users\/rida\/rida\/wmu\/OOP\/Tradeflow\/TradeflowApi\/Domain",
+  "Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "\/Users\/rida\/rida\/wmu\/OOP\/Tradeflow\/TradeflowApi\/Infrastructure"
+}
