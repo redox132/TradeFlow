@@ -16,16 +16,22 @@ public class CustomerController : ControllerBase
     }
 
     [HttpGet("customers")]
-    public async Task<IEnumerable<CustomerDTO>> GetCustomers(int pageNumber = 1, int pageSize = 100)
+    public async Task<IActionResult> GetCustomers(int pageNumber = 1, int pageSize = 100)
     {
-        var customers = await _customerService.GetCustomers(pageNumber, pageSize);
-        return customers;
+        if (!HttpContext.Items.TryGetValue("Seller", out var sellerObj) || sellerObj is not Seller seller)
+            return Unauthorized();
+
+        var customers = await _customerService.GetCustomers(pageNumber, pageSize, seller.Id);
+        return Ok(customers);
     }
 
     [HttpGet("customer/{id}")]
     public async Task<IActionResult> GetCustomer(int id)
     {
-        var customer = await _customerService.GetCustomer(id);
+        if (!HttpContext.Items.TryGetValue("Seller", out var sellerObj) || sellerObj is not Seller seller)
+            return Unauthorized();
+
+        var customer = await _customerService.GetCustomer(id, seller.Id);
         if (customer == null)
         {
             return Ok( new {message = "No customer found!", status = 404});
@@ -34,9 +40,12 @@ public class CustomerController : ControllerBase
     }
 
     [HttpPost("customers")]
-    public async Task<Customer> AddCustomer([FromBody] CustomerDTO customer)
+    public async Task<IActionResult> AddCustomer([FromBody] CustomerDTO customer)
     {
-        var createdCustomer = await _customerService.AddCustomer(customer);
-        return createdCustomer;
+        if (!HttpContext.Items.TryGetValue("Seller", out var sellerObj) || sellerObj is not Seller seller)
+            return Unauthorized();
+
+        var createdCustomer = await _customerService.AddCustomer(customer, seller.Id);
+        return Ok(createdCustomer);
     }
 }

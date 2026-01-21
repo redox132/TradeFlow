@@ -5,6 +5,10 @@ public class Order
 {
     public int Id { get; set; }
 
+    public int SellerId { get; set; }
+    // Backwards-compatibility: some tests and older code expect UserId
+    public int UserId { get => SellerId; set => SellerId = value; }
+
     public int CustomerId { get; set; }
     public Customer Customer { get; set; } = null!;
 

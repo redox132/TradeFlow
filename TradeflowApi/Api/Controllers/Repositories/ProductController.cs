@@ -23,7 +23,10 @@ public class ProductController : ControllerBase
     [HttpGet("products")]
     public async Task<IActionResult> GetAll()
     {
-        var products = await _productService.GetAllProductsAsync(1, 100);
+        if (!HttpContext.Items.TryGetValue("Seller", out var sellerObj) || sellerObj is not Seller seller)
+            return Unauthorized();
+
+        var products = await _productService.GetAllProductsAsync(seller.Id, 1, 100);
         OK ok = new OK
         {
             Status = 200,
@@ -38,7 +41,10 @@ public class ProductController : ControllerBase
     [HttpGet("products/{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var product = await _productService.GetProductByIdAsync(id);
+        if (!HttpContext.Items.TryGetValue("Seller", out var sellerObj) || sellerObj is not Seller seller)
+            return Unauthorized();
+
+        var product = await _productService.GetProductByIdAsync(seller.Id, id);
         if (product == null)
             return NotFound();
 

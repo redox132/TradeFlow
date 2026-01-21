@@ -17,6 +17,20 @@ public class ProductRepository : IProductRepository
         _context = context;
     }
 
+    public async Task<IEnumerable<Product>> GetAllAsync(int sellerId, int pageNumber, int pageSize)
+    {
+        pageNumber = pageNumber < 1 ? 1 : pageNumber;
+        pageSize = pageSize < 1 ? 10 : pageSize;
+
+        return await _context.Products
+            .Where(p => p.SellerId == sellerId)
+            .AsNoTracking()
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+    }
+
+    // Backwards-compatible overload: return all products (no seller filtering)
     public async Task<IEnumerable<Product>> GetAllAsync(int pageNumber, int pageSize)
     {
         pageNumber = pageNumber < 1 ? 1 : pageNumber;
@@ -29,6 +43,12 @@ public class ProductRepository : IProductRepository
             .ToListAsync();
     }
 
+    public async Task<Product?> GetByIdAsync(int sellerId, int id)
+    {
+        return await _context.Products.FirstOrDefaultAsync(u => u.Id == id && u.SellerId == sellerId);
+    }
+
+    // Backwards-compatible overload: get by id without seller check
     public async Task<Product?> GetByIdAsync(int id)
     {
         return await _context.Products.FirstOrDefaultAsync(u => u.Id == id);

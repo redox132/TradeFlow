@@ -19,14 +19,20 @@ public class OrderController : ControllerBase
     [HttpGet("orders")]
     public async Task<IActionResult> GetOrders(int pageSize = 1, int pageNumber = 100)
     {
-        var orders = await _orderService.GetOrdersAsync(pageSize, pageNumber);
+        if (!HttpContext.Items.TryGetValue("Seller", out var sellerObj) || sellerObj is not Seller seller)
+            return Unauthorized();
+
+        var orders = await _orderService.GetOrdersAsync(seller.Id, pageSize, pageNumber);
         return Ok(orders);
     }
 
     [HttpGet("order/{id}")]
     public async Task<IActionResult> GetOrder(int id)
     {
-        var order = await _orderService.GetOrderByIdAsync(id);
+        if (!HttpContext.Items.TryGetValue("Seller", out var sellerObj) || sellerObj is not Seller seller)
+            return Unauthorized();
+
+    var order = await _orderService.GetOrderByIdAsync(seller.Id, id);
         return Ok(order);
     }
 
@@ -34,13 +40,16 @@ public class OrderController : ControllerBase
     [HttpDelete("order/{id}")]
     public async Task<IActionResult> DeleteOrder(int id)
     {
-        var order = await _orderService.GetOrderByIdAsync(id);
-        if (order == null)
+        if (!HttpContext.Items.TryGetValue("Seller", out var sellerObj) || sellerObj is not Seller seller)
+            return Unauthorized();
+
+    var order = await _orderService.GetOrderByIdAsync(seller.Id, id);
+        if (order == null || !order.Any())
         {
             return NotFound();
         }
 
-        await _orderService.DeleteOrderAsync(id);
+        await _orderService.DeleteOrderAsync(seller.Id, id);
 
         return Ok(new { message = "Order deleted successfully" });
     }
@@ -48,7 +57,10 @@ public class OrderController : ControllerBase
     [HttpPost("order")]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest order)
     {
-        var createdOrder = await _orderService.CreateOrderAsync(order);
+        if (!HttpContext.Items.TryGetValue("Seller", out var sellerObj) || sellerObj is not Seller seller)
+            return Unauthorized();
+
+        var createdOrder = await _orderService.CreateOrderAsync(order, seller.Id);
         return Ok(createdOrder);
     }
 }

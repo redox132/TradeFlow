@@ -12,15 +12,25 @@ public class ProductService : IProductService
     {
         _productRepository = productRepository;
     }
-    public Task<IEnumerable<Product>> GetAllProductsAsync(int pageNumber, int pageSize)
+    public Task<IEnumerable<Product>> GetAllProductsAsync(int sellerId, int pageNumber, int pageSize)
     {
-        var products = _productRepository.GetAllAsync(pageNumber, pageSize);
+        var products = _productRepository.GetAllAsync(sellerId, pageNumber, pageSize);
         return products;
     }
+    // Backwards-compatible overload
+    public Task<IEnumerable<Product>> GetAllProductsAsync(int pageNumber, int pageSize)
+    {
+        return _productRepository.GetAllAsync(pageNumber, pageSize);
+    }
+    public Task<Product?> GetProductByIdAsync(int sellerId, int id)
+    {
+        var product = _productRepository.GetByIdAsync(sellerId, id);
+        return product;
+    }
+    // Backwards-compatible overload
     public Task<Product?> GetProductByIdAsync(int id)
     {
-        var product = _productRepository.GetByIdAsync(id);
-        return product;
+        return _productRepository.GetByIdAsync(id);
     }
     public Task CreateProductAsync(CreateProductRequest product)
     {

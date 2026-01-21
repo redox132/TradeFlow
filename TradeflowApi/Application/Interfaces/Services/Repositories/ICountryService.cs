@@ -4,5 +4,7 @@ namespace Tradeflow.TradeflowApi.Application.Interfaces.Services.Repositories;
 
 public interface ICountryService
 {
+    Task<IEnumerable<CountryDTO>> GetCountriesAsync(int sellerUserId);
+    // Backwards-compatible overload
     Task<IEnumerable<CountryDTO>> GetCountriesAsync();
 }
