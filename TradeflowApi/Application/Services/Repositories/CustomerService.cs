@@ -17,7 +17,8 @@ public class CustomerService : ICustomerService
     {
         return await _customerRepository.GetCustomers(pageNumber, PageSize, sellerId);
     }
-    // Backwards-compatible overload
+
+    
     public async Task<IEnumerable<CustomerDTO>> GetCustomers(int pageNumber, int PageSize)
     {
         return await _customerRepository.GetCustomers(pageNumber, PageSize);
@@ -26,7 +27,7 @@ public class CustomerService : ICustomerService
     {
         return await _customerRepository.GetCustomer(id, sellerId);
     }
-    // Backwards-compatible overload
+
     public async Task<Customer> GetCustomer(int id)
     {
         return await _customerRepository.GetCustomer(id);
@@ -36,7 +37,7 @@ public class CustomerService : ICustomerService
     {
         return await _customerRepository.AddCustomer(customer, sellerId);
     }
-    // Backwards-compatible overload
+    
     public async Task<Customer> AddCustomer(CustomerDTO customer)
     {
         return await _customerRepository.AddCustomer(customer);
