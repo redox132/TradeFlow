@@ -14,12 +14,16 @@ public class AppDbContext : DbContext
 
     public DbSet<Seller> Sellers { get; set; } = null!;
     public DbSet<Order> Orders { get; set; } = null!;
+    public DbSet<OrderShipment> OrderShipments { get; set; } = null!;
     public DbSet<Product> Products { get; set; } = null!;
     public DbSet<OrderItem> OrderItems { get; set; } = null!;
     public DbSet<Country> Countries { get; set; } = null!;
     public DbSet<ShipmentMethod> ShipmentMethods { get; set; } = null!;
     public DbSet<Address> Addresses { get; set; } = null!;
     public DbSet<Customer> Customers { get; set; } = null!;
+    public DbSet<OrderReturn> OrderReturns { get; set; } = null!;
+    public DbSet<Storage> Storages { get; set; } = null!;
+    public DbSet<Supplier> Suppliers { get; set; } = null!;
     public DbSet<Invoice> Invoices { get; set; } = null!;
     public DbSet<ApiKey> ApiKeys { get; set; } = null!;
 }

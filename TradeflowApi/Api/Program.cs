@@ -50,6 +50,19 @@ builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 builder.Services.AddScoped<IApiKeyService, ApiKeyService>();
 builder.Services.AddScoped<IApiKeyRepository, ApiKeyRepository>();
+builder.Services.AddScoped<IOrderShipmentService, OrderShipmentService>();
+builder.Services.AddScoped<IOrderShipmentRepository, OrderShipmentRepository>();
+builder.Services.AddScoped<IShipmentMethodService, ShipmentMethodService>();
+builder.Services.AddScoped<IShipmentMethodRepository, ShipmentMethodRepository>();
+// Returns / Storages / Suppliers
+builder.Services.AddScoped<IOrderReturnService, OrderReturnService>();
+builder.Services.AddScoped<IOrderReturnRepository, OrderReturnRepository>();
+
+builder.Services.AddScoped<IStorageService, StorageService>();
+builder.Services.AddScoped<IStorageRepository, StorageRepository>();
+
+builder.Services.AddScoped<ISupplierService, SupplierService>();
+builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 
 
 var connString =
