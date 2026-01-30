@@ -17,11 +17,13 @@ public class CustomerRepository : ICustomerRepository
         _appDbContext = appDbContext;
     }
 
+    // Seller-scoped paged query
     public async Task<List<CustomerDTO>> GetCustomers(int pageNumber, int pageSize, int sellerId)
     {
         return await _appDbContext.Customers
             .Where(c => c.SellerId == sellerId)
             .AsNoTracking()
+            .OrderBy(c => c.Id) 
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .Select(c => new CustomerDTO
@@ -47,11 +49,10 @@ public class CustomerRepository : ICustomerRepository
             .ToListAsync();
     }
 
-
     public async Task<Customer> GetCustomer(int id, int sellerId)
     {
-        return await _appDbContext.Customers.
-            Where(c => c.Id == id && c.SellerId == sellerId)
+        return await _appDbContext.Customers
+            .Where(c => c.Id == id && c.SellerId == sellerId)
             .Select(c => new Customer
             {
                 FName = c.FName,
@@ -91,11 +92,12 @@ public class CustomerRepository : ICustomerRepository
         return customer;
     }
 
-    // Backwards-compatible overloads (no seller scoping)
+    // Non-seller-scoped paged query
     public async Task<List<CustomerDTO>> GetCustomers(int pageNumber, int pageSize)
     {
         return await _appDbContext.Customers
             .AsNoTracking()
+            .OrderBy(c => c.Id) 
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .Select(c => new CustomerDTO
@@ -123,8 +125,8 @@ public class CustomerRepository : ICustomerRepository
 
     public async Task<Customer> GetCustomer(int id)
     {
-        return await _appDbContext.Customers.
-            Where(c => c.Id == id)
+        return await _appDbContext.Customers
+            .Where(c => c.Id == id)
             .Select(c => new Customer
             {
                 FName = c.FName,
@@ -162,5 +164,4 @@ public class CustomerRepository : ICustomerRepository
 
         return customer;
     }
-
 }

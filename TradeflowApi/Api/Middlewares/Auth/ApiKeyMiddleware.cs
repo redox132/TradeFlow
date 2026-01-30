@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Routing;
 public class ApiKeyMiddleware
 {
     private readonly RequestDelegate _next;
-
+    
     public ApiKeyMiddleware(RequestDelegate next)
     {
         _next = next;
