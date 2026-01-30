@@ -1,3 +1,7 @@
+# Git URL 
+https://github.com/redox132/TradeFlow
+
+
 # Tradeflow API
 
 Tradeflow API is a full‑fledged **marketplace backend** that mimics the behavior of a real‑world ecommerce/marketplace system.  
